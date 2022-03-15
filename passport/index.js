@@ -47,7 +47,7 @@ module.exports = (app) => {
             {
                 clientID: process.env.NAVER_ID,
                 clientSecret: process.env.NAVER_SECRET,
-                callbackURL: '/auth/naver/callback',
+                callbackURL: process.env.NAVER_URL
             },
             async (accessToken, refreshToken, profile, done) => {
                 console.log('nvaer profile : ', profile);
@@ -81,7 +81,7 @@ module.exports = (app) => {
             {
                 clientID: process.env.GOOGLE_ID,
                 clientSecret: process.env.GOOGLE_SECRET,
-                callbackURL: '/auth/google/callback',
+                callbackURL: process.env.GOOGLE_URL,
             },
             async (accessToken, refreshToken, profile, done) => {
                 console.log('google profile : ', profile);
