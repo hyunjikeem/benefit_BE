@@ -1,11 +1,11 @@
 const passport = require('passport');
 const KakaoStrategy = require('passport-kakao').Strategy;
-const NaverStrategy = require('passport-naver').Strategy;
+const NaverStrategy = require('passport-naver-v2').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const { User } = require('../models/user');
 
-module.exports = (app) => {
-    app.use(passport.initialize()); // passport를 초기화 하기 위해서 passport.initialize 미들웨어 사용
+module.exports = () => {
+    // app.use(passport.initialize()); // passport를 초기화 하기 위해서 passport.initialize 미들웨어 사용
     passport.use(
         new KakaoStrategy({
             clientID: process.env.KAKAO_ID, // 카카오 로그인에서 발급받은 REST API 키

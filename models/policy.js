@@ -1,15 +1,15 @@
 const Sequelize = require('sequelize');
+const { Model } = require('sequelize');
 
-module.exports = class Policy extends Sequelize.Model {
-    /*
-        static init:
-        테이블에 대한 자료형 지정 및 테이블 자체 설정
+module.exports = (sequelize, DataTypes) => {
+    class Policy extends Model {
+        static associate(models) {
+            //테이블과 테이블의 관계를 설정
+            
+        }
 
-        static associate:
-        테이블과 테이블의 관계에 대한 설정
-    */
-    static init(sequelize) {
-        return super.init(
+    }
+    Policy.init(
             {
             postId: {
                 type: Sequelize.INTEGER(100),
@@ -127,7 +127,8 @@ module.exports = class Policy extends Sequelize.Model {
                 type: Sequelize.INTEGER(100), 
             },
 
-        },{
+        },
+            {
             // 테이블에 대한 설정 지정
             sequelize,              // static init의 매개변수와 연결되는 옵션, model/index.js에서 연결
             timestamps: false,      // true시 createAt, updateAt 컬럼 추가, 각각 생성 및 수정 시 시간 반영
@@ -139,11 +140,8 @@ module.exports = class Policy extends Sequelize.Model {
             collate: 'utf8_general_ci',
             },
         );
-    }
-    static associate(db) {
-        //테이블과 테이블의 관계를 설정
-        
-    }
+  
+    return Policy;
 }
 
 

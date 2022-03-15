@@ -5,14 +5,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class User extends Model {
         static associate(models) {
-            User.hasMany(models.zzim, {
-                foreignKey: 'userId',
-                sourceKey: 'userId',
-            });
-            User.hasMany(models.comment, {
-                foreignKey: 'userId',
-                sourceKey: 'userId',
-            });
+            
         }
     }
     User.init(
