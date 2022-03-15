@@ -3,6 +3,8 @@ const router = express.Router();
 const passport = require('passport');
 const authMiddleware = require('../middleware/auth-middleware');
 
+const { kakaoCallback, googleCallback, naverCallback } = require('../controller/user');
+
 router.get('/auth', authMiddleware, auth);
 router.get('/kakao', passport.authenticate('kakao'));
 router.get('/naver', passport.authenticate('naver', { authType: 'reprompt' }));
