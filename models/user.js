@@ -5,14 +5,14 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class User extends Model {
         static associate(models) {
-            User.hasMany(models.zzim, {
-                foreignKey: 'userId',
-                sourceKey: 'userId',
-            });
-            User.hasMany(models.comment, {
-                foreignKey: 'userId',
-                sourceKey: 'userId',
-            });
+            // User.hasMany(models.zzim, {
+            //     foreignKey: 'userId',
+            //     sourceKey: 'userId',
+            // });
+            // User.hasMany(models.comment, {
+            //     foreignKey: 'userId',
+            //     sourceKey: 'userId',
+            // });
         }
     }
     User.init(
@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
             nickname: {
                 allowNull: false,
                 unique: true,
+                type: Sequelize.STRING,
+            },
+            providerType: {
+                allowNull: false,
                 type: Sequelize.STRING
             }
         },
