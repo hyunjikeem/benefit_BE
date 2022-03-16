@@ -5,8 +5,8 @@ const authMiddleware = require('../middleware/auth-middleware');
 
 const { kakaoCallback, googleCallback, naverCallback } = require('../controller/user');
 
-router.get('/auth', authMiddleware, auth);
-router.get('/kakao', passport.authenticate('kakao'));
+// router.get('/auth', kakaoCallback, authMiddleware);
+router.get('/kakao/callback', passport.authenticate('kakao'), kakaoCallback);
 router.get('/naver', passport.authenticate('naver', { authType: 'reprompt' }));
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 

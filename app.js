@@ -8,7 +8,7 @@ const cors = require('cors');
 // const router = require('./routes/auth');
 
 app.use(cors());
-passportConfig();
+passportConfig(app);
 
 // force: 서버 실행 시 마다 테이블을 재생성 할 것인지 아닌지
 sequelize.sync({ force: false }).then(() => {
@@ -18,8 +18,9 @@ sequelize.sync({ force: false }).then(() => {
 });
 
 const userRouter = require('./routes/user');
+const mainDetail = require('./routes/main')
 
-app.use('/api', [userRouter]);
+app.use([userRouter, mainDetail]);
 
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);
