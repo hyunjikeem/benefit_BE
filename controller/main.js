@@ -53,7 +53,7 @@ exports.mainpage = async (req, res) => {
 // 상세 페이지로 줄 정보 
 exports.detailpage = async (req, res) => {
   try {
-    const { postId } = req.params;
+    const { postId } = req.params; 
     const post = await Policy.findOne({
         attributes:['postId', 'title', 'group', 'location', 'summary', 'category', 
         'benefit_desc', 'benefit', 'apply_period', 'scale', 'age', 'education', 
