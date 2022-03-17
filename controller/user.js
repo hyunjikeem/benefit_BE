@@ -66,7 +66,7 @@ const naverCallback = (req, res, next) => {
 //     }
 // };
 
-const auth = async (req, res) => {
+const Login_maintain = async (req, res) => {
     const { user } = res.locals;
     res.send({
         user,
@@ -77,7 +77,7 @@ module.exports = {
     kakaoCallback,
     googleCallback,
     naverCallback,
-    auth,
+    Login_maintain,
     // getUser,
     // getUserInfo,
 };
