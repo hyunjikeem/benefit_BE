@@ -16,6 +16,8 @@ module.exports = (app) => {
         // accessToken, refreshToken : 로그인 성공 후 카카오가 보내준 토큰
         // profile: 카카오가 보내준 유저 정보. profile의 정보를 바탕으로 회원가입
         async (accessToken, refreshToken, profile, done) => {
+            console.log(accessToken);
+            console.log(refreshToken);
             console.log('kakao profile', profile);
             try {
                 const exUser = await User.findOne({
@@ -28,10 +30,10 @@ module.exports = (app) => {
                 } else {
                     // 가입되지 않는 유저면 회원가입 시키고 로그인을 시킨다
                     const newUser = await User.create({
-                        // email: profile._json && profile._json.kakao_account_email,
+                        email: profile._json && profile._json.kakao_account_email,
                         nickname: profile.displayName,
                         snsId: profile.id,
-                        // providerType: 'kakao',
+                        providerType: 'kakao',
                     });
                     done(null, newUser); // 회원가입하고 로그인 인증 완료
                 }
@@ -63,7 +65,7 @@ module.exports = (app) => {
                         // 가입되지 않는 유저면 회원가입 시키고 로그인을 시킨다
                         const newUser = await User.create({
                             email: profile.email,
-                            nick: profile.name,
+                            nickname: profile.name,
                             snsId: profile.id,
                             providerType: 'naver',
                         });
@@ -96,8 +98,8 @@ module.exports = (app) => {
                     } else {
                         // 가입되지 않는 유저면 회원가입 시키고 로그인을 시킨다
                         const newUser = await User.create({
-                            email: profile?.email[0].value,
-                            nick: profile.displayName,
+                            // email: profile?.email[0].value,
+                            nickname: profile.displayName,
                             snsId: profile.id,
                             providerType: 'google',
                         });
@@ -109,5 +111,12 @@ module.exports = (app) => {
                 }
             },
         ),
-    );
+    )
+    passport.serializeUser((user,done)=>{ 
+        done(null,user);
+    });
+    passport.deserializeUser((user,done)=>{
+        done(null,user);
+    });
+    // app.set('passport',passport)
 };

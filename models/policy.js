@@ -143,8 +143,3 @@ module.exports = (sequelize, DataTypes) => {
   
     return Policy;
 }
-
-
-
-
-

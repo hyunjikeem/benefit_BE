@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class User extends Model {
+    class Comment extends Model {
         static associate(models) {
             // User.hasMany(models.zzim, {
             //     foreignKey: 'userId',
@@ -15,26 +15,22 @@ module.exports = (sequelize, DataTypes) => {
             // });
         }
     }
-    User.init(
+    Comment.init(
         {
-            userId: {
+            CommentId: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-            snsId: {
+            userId: {
                 allowNull: false,
-                type: Sequelize.STRING,
+                type: Sequelize.INTEGER,
             },
-            nickname: {
+            postId: {
                 allowNull: false,
-                unique: true,
-                type: Sequelize.STRING,
-            },
-            providerType: {
-                allowNull: false,
-                type: Sequelize.STRING
+                type: Sequelize.INTEGER(100),
+
             }
         },
         {
@@ -43,5 +39,5 @@ module.exports = (sequelize, DataTypes) => {
             modelName: 'User',
         },
     );
-    return User;
+    return Comment;
 };
