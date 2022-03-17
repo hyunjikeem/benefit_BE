@@ -67,7 +67,7 @@ const naverCallback = (req, res, next) => {
 // };
 
 const Login_maintain = async (req, res) => {
-    const { user } = res.locals;
+    const { user } = res.locals.user;
     console.log(user);
     res.send({
         user,
