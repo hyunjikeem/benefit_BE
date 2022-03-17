@@ -17,10 +17,14 @@ sequelize.sync({ force: false }).then(() => {
     console.error(err);
 });
 
-const userRouter = require('./routes/user');
-const mainDetail = require('./routes/main')
+app.use(express.json()); // body parser
+app.use(express.urlencoded({ extended: false })); // form body parser
 
-app.use([userRouter, mainDetail]);
+const userRouter = require('./routes/user');
+const mainDetail = require('./routes/main');
+const searchRouter = require('./routes/search')
+
+app.use([userRouter, mainDetail, searchRouter]);
 
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);
