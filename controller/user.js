@@ -66,19 +66,29 @@ const naverCallback = (req, res, next) => {
 //     }
 // };
 
-const Login_maintain = async (req, res) => {
-    const { user } = res.locals.user;
-    console.log(user);
-    res.send({
-        user,
-    });
+const auth = async (req, res) => {
+    try {
+        const user = res.locals.user;
+        res.json({
+            ok: true,
+            message: '로그인 정보 불러오기 성공',
+            userId: user.userId,
+            nickname: user.nickname,
+        });
+    } catch (error) {
+        res.json({
+            ok: false,
+            message: '로그인 정보 불러오기 실패',
+        });
+        console.error(`로그인 정보 불러오기에서 ${error}가 발생했습니다`);
+    }
 };
 
 module.exports = {
     kakaoCallback,
     googleCallback,
     naverCallback,
-    Login_maintain,
+    auth,
     // getUser,
     // getUserInfo,
 };
