@@ -1,5 +1,9 @@
 node_modules
 .env
+<<<<<<< HEAD
+passport/
+=======
 config
 mvp.json
 .DS_Store
+>>>>>>> 11321ab94626eed3a6617335bcaac181eff80e9d
