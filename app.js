@@ -11,6 +11,10 @@ const cors = require('cors');
 app.use(cors());
 passportConfig(app);
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+
 // force: 서버 실행 시 마다 테이블을 재생성 할 것인지 아닌지
 sequelize.sync({ force: false }).then(() => {
     console.log("DB Connected Success");
