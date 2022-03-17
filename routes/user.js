@@ -4,7 +4,7 @@ const passport = require('passport');
 const authMiddleware = require('../middleware/auth-middleware');
 const userController = require('../controller/user');
 
-const { kakaoCallback, googleCallback, naverCallback } = require('../controller/user');
+const { kakaoCallback, googleCallback, naverCallback, auth } = require('../controller/user');
 
 // router.get('/auth', authMiddleware);
 router.get('/kakao', passport.authenticate('kakao')/*, kakaoCallback*/);
@@ -16,7 +16,7 @@ router.get('/naver/callback', userController.naverCallback);
 router.get('/google/callback', passport.authenticate('google', { scope: ['profile', 'email'] }), googleCallback);
 // router.get('/google/callback', passport.authenticate('google'), userController.googleCallback);
 
-
+router.get('/users/me', authMiddleware, auth);
 
 
 module.exports = router;
