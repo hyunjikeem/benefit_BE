@@ -17,4 +17,5 @@ router.get('/google/callback', passport.authenticate('google', { scope: ['profil
 // router.get('/google/callback', passport.authenticate('google'), userController.googleCallback);
 
 
+
 module.exports = router;
