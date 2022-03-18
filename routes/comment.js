@@ -8,6 +8,6 @@ router.post('/comment', authMiddleware, makeComment);
 
 router.put('/comment/update', authMiddleware, updateComment);
 
-router.delete('/comment/delete/:commentId', authMiddleware, deleteComment);
+router.delete('/comment/delete', authMiddleware, deleteComment);
 
 module.exports = router;

@@ -23,12 +23,17 @@ sequelize.sync({ force: false }).then(() => {
 });
 
 const userRouter = require('./routes/user');
-const category1Router = require('./routes/category1');
 const mainRouter = require('./routes/main');
+const commentRouter = require('./routes/comment');
+const mypageRouter = require('./routes/mypage');
+const zzimRouter = require('./routes/zzim');
 const searchRouter = require('./routes/search');
 
+
 app.use('/auth', [userRouter]);
-app.use([searchRouter, mainRouter])  
+app.use([mainRouter, commentRouter, mypageRouter, zzimRouter, searchRouter]);
+
+
 
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);

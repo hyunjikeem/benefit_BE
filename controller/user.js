@@ -4,25 +4,6 @@ const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 
 
-const auth = async (req, res) => {
-    try {
-        const user = res.locals.user;
-        res.json({
-            ok: true,
-            message: '로그인 정보 불러오기 성공',
-            userId: user.userId,
-            nickname: user.nickname,
-        });
-    } catch (error) {
-        res.json({
-            ok: false,
-            message: '로그인 정보 불러오기 실패',
-        });
-        console.error(`로그인 정보 불러오기에서 ${error}가 발생했습니다`);
-    }
-};
-
-
 const kakaoCallback = (req, res, next) => {
     /*req.app.get('*/passport/*')*/.authenticate('kakao', { failureRedirect: '/' }, (err, user, info) => {
         if (err) return next(err);
@@ -87,9 +68,7 @@ const naverCallback = (req, res, next) => {
 // };
 
 
-
 module.exports = {
-    auth,
     kakaoCallback,
     googleCallback,
     naverCallback,
