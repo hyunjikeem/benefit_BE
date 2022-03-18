@@ -28,7 +28,7 @@ const mainRouter = require('./routes/main');
 const searchRouter = require('./routes/search');
 
 app.use('/auth', [userRouter]);
-app.use([category1Router, searchRouter, mainRouter])  
+app.use([searchRouter, mainRouter])  
 
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);
