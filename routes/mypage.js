@@ -8,5 +8,4 @@ router.get('/user/pick', authMiddleware, getZzimList);
 
 router.get('/user/review', authMiddleware, getCommentList);
 
-
 module.exports = router;
