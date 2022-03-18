@@ -26,11 +26,13 @@ const userRouter = require('./routes/user');
 const mainRouter = require('./routes/main');
 const commentRouter = require('./routes/comment');
 const zzimRouter = require('./routes/zzim');
-const searchRouter = require('./routes/search');
+const searchRouter = require('./routes/search');\
+const mypageRouter = require('./routes/mypage');
+
 
 
 app.use('/auth', [userRouter]);
-app.use([mainRouter, commentRouter, zzimRouter, searchRouter]);
+app.use([mainRouter, commentRouter, zzimRouter, searchRouter, mypageRouter]);
 
 
 
