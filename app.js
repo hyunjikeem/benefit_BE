@@ -25,13 +25,12 @@ sequelize.sync({ force: false }).then(() => {
 const userRouter = require('./routes/user');
 const mainRouter = require('./routes/main');
 const commentRouter = require('./routes/comment');
-const mypageRouter = require('./routes/mypage');
 const zzimRouter = require('./routes/zzim');
 const searchRouter = require('./routes/search');
 
 
 app.use('/auth', [userRouter]);
-app.use([mainRouter, commentRouter, mypageRouter, zzimRouter, searchRouter]);
+app.use([mainRouter, commentRouter, zzimRouter, searchRouter]);
 
 
 
