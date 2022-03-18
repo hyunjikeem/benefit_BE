@@ -24,9 +24,14 @@ sequelize.sync({ force: false }).then(() => {
 
 const userRouter = require('./routes/user');
 const category1Router = require('./routes/category1');
+const commentRouter = require('./routes/comment');
+const mypageRouter = require('./routes/mypage');
+const zzimRouter = require('./routes/zzim');
+
 
 app.use('/auth', [userRouter]);
-app.use([category1Router]) 
+app.use([category1Router, commentRouter, mypageRouter, zzimRouter]);
+
 
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);
