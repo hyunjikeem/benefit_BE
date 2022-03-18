@@ -5,14 +5,8 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Comment extends Model {
         static associate(models) {
-            // User.hasMany(models.zzim, {
-            //     foreignKey: 'userId',
-            //     sourceKey: 'userId',
-            // });
-            // User.hasMany(models.comment, {
-            //     foreignKey: 'userId',
-            //     sourceKey: 'userId',
-            // });
+            Comment.belongsTo(models.User, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
+            Comment.belongsTo(models.Policy, { foreignKey: 'postId', sourceKey: 'postId', onDelete: 'CASCADE' });
         }
     }
     Comment.init(
@@ -23,20 +17,16 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-            userId: {
+            
+            content: {
                 allowNull: false,
-                type: Sequelize.INTEGER,
-            },
-            postId: {
-                allowNull: false,
-                type: Sequelize.INTEGER(100),
-
+                type: Sequelize.STRING(255),
             }
         },
         {
             sequelize,
             timstamps: true,
-            modelName: 'User',
+            modelName: 'Comment',
         },
     );
     return Comment;
