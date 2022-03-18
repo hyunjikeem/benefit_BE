@@ -80,7 +80,6 @@ const getCommentList = async (req, res) => {
     }
 }
 
-
 module.exports = {
     getZzimList,
     getCommentList,
