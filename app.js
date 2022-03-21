@@ -3,13 +3,13 @@ const express = require('express');
 const { sequelize } = require('./models');
 const app = express();
 // const passport = require('passport');
-const passportConfig = require('./passport');
+// const passportConfig = require('./passport');
 const port = 3000;
 const cors = require('cors');
 // const router = require('./routes/auth');
 
 app.use(cors());
-passportConfig(app);
+// passportConfig(app);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -22,13 +22,13 @@ sequelize.sync({ force: false }).then(() => {
     console.error(err);
 });
 
-const userRouter = require('./routes/user');
+// const userRouter = require('./routes/user');
 const category1Router = require('./routes/category1');
 const mainRouter = require('./routes/main');
 const searchRouter = require('./routes/search');
 
-app.use('/auth', [userRouter]);
-app.use([category1Router, searchRouter, mainRouter]) 
+// app.use('/auth', [userRouter]);
+app.use([searchRouter, mainRouter])  
 
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);
