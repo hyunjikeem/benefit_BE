@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             //테이블과 테이블의 관계를 설정
             Policy.hasMany(models.Comment, { foreignKey: 'postId', sourceKey: 'postId', onDelete: 'CASCADE' });
             Policy.hasMany(models.Zzim, { foreignKey: 'postId', sourceKey: 'postId', onDelete: 'CASCADE' });
-        }
+        } 
 
     }
     Policy.init(
@@ -127,6 +127,10 @@ module.exports = (sequelize, DataTypes) => {
             view: {
                 type: Sequelize.INTEGER(100), 
             },
+            state: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            }
 
         },
             {
