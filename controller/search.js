@@ -1,6 +1,6 @@
 const { Policy } = require('../models');
 const { Op } = require('sequelize');
-// const { serializeUser } = require('passport/lib');
+const { Zzim } = require('../models')
 const { fn, col } = Policy.sequelize;
 
 
@@ -9,11 +9,11 @@ exports.searchResults = async (req, res) => {
       console.log('a')
       const {location, benefit, education, job_status, txt, limit, special_limit, apply_period } = req.body;
       
-      let userId = 0
-      
-      if(res.locals) {
-        userId = res.locals.user
-      }
+      let userId = 0;
+
+    if (res.locals.user) {
+       userId  = res.locals.user.userId
+    }
 
       
       //지원기간 (apply_period)
@@ -160,9 +160,9 @@ exports.searchResults = async (req, res) => {
             attributes: [
               [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
             ],
-            where : { userId : userId },
-            raw : true
+            where : { userId },
           }], 
+          raw : true
       });
 
     const c1 = await Policy.findAll({
@@ -186,8 +186,9 @@ exports.searchResults = async (req, res) => {
         attributes: [
           [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
         ],
-        where : { userId : userId}
+        where : { userId}
       }],
+      raw : true
   });
   const c2 = await Policy.findAll({
     attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -211,8 +212,8 @@ exports.searchResults = async (req, res) => {
         [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
       ],
       where : { userId : userId},
-      raw : true
     }],
+    raw : true
 });
     const c3 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -236,8 +237,8 @@ exports.searchResults = async (req, res) => {
           [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
         ],
         where : { userId },
-        raw : true
       }],
+      raw : true
 });
     const c4 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -261,8 +262,8 @@ exports.searchResults = async (req, res) => {
           [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
         ],
         where : { userId },
-        raw : true
       }],
+      raw : true
 });
     const c5 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -285,9 +286,9 @@ exports.searchResults = async (req, res) => {
         attributes: [
           [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
         ],
-        where : { userId : 2},
-        raw : true
+        where : { userId},
       }],
+      raw : true
 });
 const c6 = await Policy.findAll({
   attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -310,13 +311,14 @@ const c6 = await Policy.findAll({
     attributes: [
       [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
     ],
-    where : { userId : 2},
-    raw : true
+    where : { userId},
   }],
+  raw : true
 });
       
       res.json({ c0,c1,c2,c3,c4,c5,c6 });
     } catch (error) {
+      console.log(error)
       res.status(400).json({ result : 'false'})
     }  
   };

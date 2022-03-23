@@ -75,4 +75,3 @@ module.exports = {
     // getUser,
     // getUserInfo,
 };
-

@@ -3,13 +3,13 @@ const express = require('express');
 const { sequelize } = require('./models');
 const app = express();
 // const passport = require('passport');
-// const passportConfig = require('./passport');
+const passportConfig = require('./passport');
 const port = 3000;
 const cors = require('cors');
 // const router = require('./routes/auth');
 
 app.use(cors());
-// passportConfig(app);
+passportConfig(app);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

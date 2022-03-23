@@ -1,18 +1,17 @@
 const db = require("../models");
-const { getZzimList } = require("./mypage");
 const Policy = db.Policy;
 const Zzim = db.Zzim;
+const Comment = db.Comment;
 const { fn, col } = Policy.sequelize;
 
 
 
 // 메인페이지로 줄 정보 
 exports.mainpage = async (req, res) => {
-  
   try {
     const todayBest = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', 'summary', 'location',[fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 
-       'view', ],
+       'view' ],
         include : [{
             model: Zzim, 
             required: false,
@@ -61,6 +60,7 @@ exports.mainpage = async (req, res) => {
 
     res.json({ todayBest, categoryBest })
   } catch (error) {
+    console.error(error)
     res.status(400).json({ result : 'false'})
   } 
 };
@@ -68,16 +68,36 @@ exports.mainpage = async (req, res) => {
 exports.detailpage = async (req, res) => {
   try {
     const { postId } = req.params; 
-    const post = await Policy.findOne({
+    
+    let userId = 0;
+
+    if (res.locals.user) {
+       userId  = res.locals.user.userId
+    }
+      
+    console.log(userId)
+    const post = await Policy.findAll({
+        where: { postId: postId },
         attributes:['postId', 'title', 'group', 'location', 'summary', 'category', 
         'benefit_desc', 'benefit', 'apply_period', 'scale', 'age', 'education', 
         'major', 'job_status', 'special', 'process', 'dday', 'apply_site', 
         'operation', 'do_period', 'residence', 'plus', 'submit', 'etc', 
         'maker', 'reference_site1', 'reference_site2','view'],
-        where: { postId: postId },
+        include : [{
+          model: Zzim, 
+          required: false,
+          attributes: [
+            [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
+          ],
+          where : {userId}
+        }],
+        raw : true
     });
+    await Policy.update({ view : Policy.sequelize.literal('view + 1') }, { where: { postId : postId } });
+    
     res.json({ post });
   } catch (error) {
+    console.error(error)
     res.status(400).json({ result : 'false'})
   }  
 };
