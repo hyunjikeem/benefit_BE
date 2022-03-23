@@ -5,7 +5,7 @@ const { Sequelize, sequelize } = require('../models')
 
 
 const getPolicy = async (req, res) => {
-    
+
     try {
 
         const c0 = await Policy.findAll({
