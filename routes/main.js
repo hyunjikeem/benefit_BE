@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const freeMiddleware = require('../middleware/free-middleware');
 
-// const authMiddleware = require("../middlewares/auth-middleware");
 const controller = require("../controller/main");
 
 // 메인페이지 신상품

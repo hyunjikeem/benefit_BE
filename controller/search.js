@@ -6,7 +6,15 @@ const { fn, col } = Policy.sequelize;
 
 exports.searchResults = async (req, res) => {
     try {
+      console.log('a')
       const {location, benefit, education, job_status, txt, limit, special_limit, apply_period } = req.body;
+      
+      let userId = 0
+      
+      if(res.locals) {
+        userId = res.locals.user
+      }
+
       
       //지원기간 (apply_period)
       const today = new Date();
@@ -136,7 +144,6 @@ exports.searchResults = async (req, res) => {
           attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
           where: {
               [Op.and] : [
-                //   {category : "주거·금융"},
                   { [Op.or]: txtWords },
                   { [Op.or]: locationWords },
                   { [Op.or]: benefitWords },
@@ -145,9 +152,17 @@ exports.searchResults = async (req, res) => {
                   limit_status,
                   special_status,
                   { [Op.or]: applyWords },
-                //   educationWord,
             ]
-          }, 
+          },
+          include : [{
+            model: Zzim, 
+            required: false,
+            attributes: [
+              [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
+            ],
+            where : { userId : userId },
+            raw : true
+          }], 
       });
 
     const c1 = await Policy.findAll({
@@ -163,9 +178,16 @@ exports.searchResults = async (req, res) => {
               limit_status,
               special_status,
               { [Op.or]: applyWords },
-            //   educationWord,
         ]
       }, 
+      include : [{
+        model: Zzim, 
+        required: false,
+        attributes: [
+          [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
+        ],
+        where : { userId : userId}
+      }],
   });
   const c2 = await Policy.findAll({
     attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -180,60 +202,92 @@ exports.searchResults = async (req, res) => {
             limit_status,
             special_status,
             { [Op.or]: applyWords },
-          //   educationWord,
       ]
     }, 
+    include : [{
+      model: Zzim, 
+      required: false,
+      attributes: [
+        [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
+      ],
+      where : { userId : userId},
+      raw : true
+    }],
 });
-const c3 = await Policy.findAll({
-  attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
-  where: {
-      [Op.and] : [
-          {category : "창업지원"},
-          { [Op.or]: txtWords },
-          { [Op.or]: locationWords },
-          { [Op.or]: benefitWords },
-          { [Op.or]: educationWords },
-          { [Op.or]: jobWords },
-          limit_status,
-          special_status,
-          { [Op.or]: applyWords },
-        //   educationWord,
-    ]
-  }, 
+    const c3 = await Policy.findAll({
+      attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
+      where: {
+          [Op.and] : [
+              {category : "창업지원"},
+              { [Op.or]: txtWords },
+              { [Op.or]: locationWords },
+              { [Op.or]: benefitWords },
+              { [Op.or]: educationWords },
+              { [Op.or]: jobWords },
+              limit_status,
+              special_status,
+              { [Op.or]: applyWords },
+        ]
+      }, 
+      include : [{
+        model: Zzim, 
+        required: false,
+        attributes: [
+          [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
+        ],
+        where : { userId },
+        raw : true
+      }],
 });
-const c4 = await Policy.findAll({
-  attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
-  where: {
-      [Op.and] : [
-          {category : "생활·복지"},
-          { [Op.or]: txtWords },
-          { [Op.or]: locationWords },
-          { [Op.or]: benefitWords },
-          { [Op.or]: educationWords },
-          { [Op.or]: jobWords },
-          limit_status,
-          special_status,
-          { [Op.or]: applyWords },
-        //   educationWord,
-    ]
-  }, 
+    const c4 = await Policy.findAll({
+      attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
+      where: {
+          [Op.and] : [
+              {category : "생활·복지"},
+              { [Op.or]: txtWords },
+              { [Op.or]: locationWords },
+              { [Op.or]: benefitWords },
+              { [Op.or]: educationWords },
+              { [Op.or]: jobWords },
+              limit_status,
+              special_status,
+              { [Op.or]: applyWords },
+        ]
+      }, 
+      include : [{
+        model: Zzim, 
+        required: false,
+        attributes: [
+          [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
+        ],
+        where : { userId },
+        raw : true
+      }],
 });
-const c5 = await Policy.findAll({
-  attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
-  where: {
-      [Op.and] : [
-          {category : "정책참여"},
-          { [Op.or]: txtWords },
-          { [Op.or]: locationWords },
-          { [Op.or]: benefitWords },
-          { [Op.or]: educationWords },
-          { [Op.or]: jobWords },
-          limit_status,
-          special_status,
-          { [Op.or]: applyWords },
-        //   educationWord,
-    ]
-  }, 
+    const c5 = await Policy.findAll({
+      attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
+      where: {
+          [Op.and] : [
+              {category : "정책참여"},
+              { [Op.or]: txtWords },
+              { [Op.or]: locationWords },
+              { [Op.or]: benefitWords },
+              { [Op.or]: educationWords },
+              { [Op.or]: jobWords },
+              limit_status,
+              special_status,
+              { [Op.or]: applyWords },
+        ]
+      }, 
+      include : [{
+        model: Zzim, 
+        required: false,
+        attributes: [
+          [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
+        ],
+        where : { userId : 2},
+        raw : true
+      }],
 });
 const c6 = await Policy.findAll({
   attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -248,13 +302,19 @@ const c6 = await Policy.findAll({
           limit_status,
           special_status,
           { [Op.or]: applyWords },
-        //   educationWord,
     ]
   }, 
+  include : [{
+    model: Zzim, 
+    required: false,
+    attributes: [
+      [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
+    ],
+    where : { userId : 2},
+    raw : true
+  }],
 });
       
-
-
       res.json({ c0,c1,c2,c3,c4,c5,c6 });
     } catch (error) {
       res.status(400).json({ result : 'false'})

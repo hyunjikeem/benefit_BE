@@ -1,16 +1,30 @@
-const { Policy } = require('../models');
-const { Op } = require('sequelize');
+const db = require("../models");
+const { getZzimList } = require("./mypage");
+const Policy = db.Policy;
+const Zzim = db.Zzim;
 const { fn, col } = Policy.sequelize;
 
 
 
 // 메인페이지로 줄 정보 
 exports.mainpage = async (req, res) => {
+  
   try {
     const todayBest = await Policy.findAll({
-        attributes:['postId', 'category', 'benefit', 'title', 'summary', 'location',[fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"],  'view'],
+      attributes:['postId', 'category', 'benefit', 'title', 'summary', 'location',[fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 
+       'view', ],
+        include : [{
+            model: Zzim, 
+            required: false,
+            attributes: [
+              [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
+            ],
+            where : { userId : 2}
+          }],
         order: [['view','DESC']],
         limit: 5,
+        raw : true,
+        
     });
     
     const c1 = await Policy.findOne({

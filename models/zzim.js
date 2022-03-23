@@ -3,31 +3,31 @@ const Sequelize = require('sequelize');
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Comment extends Model {
+    class Zzim extends Model {
         static associate(models) {
-            Comment.belongsTo(models.User, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
-            Comment.belongsTo(models.Policy, { foreignKey: 'postId', sourceKey: 'postId', onDelete: 'CASCADE' });
+            Zzim.belongsTo(models.User, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
+            Zzim.belongsTo(models.Policy, { foreignKey: 'postId', sourceKey: 'userId', onDelete: 'CASCADE' });
         }
     }
-    Comment.init(
+    Zzim.init(
         {
-            CommentId: {
+            ZzimId: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
             
-            content: {
+            zzim_status: {
                 allowNull: false,
-                type: Sequelize.STRING(255),
+                type: Sequelize.BOOLEAN,
             }
         },
         {
             sequelize,
             timstamps: true,
-            modelName: 'Comment',
+            modelName: 'Zzim',
         },
     );
-    return Comment;
+    return Zzim;
 };
