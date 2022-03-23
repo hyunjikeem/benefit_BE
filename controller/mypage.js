@@ -46,36 +46,33 @@ const getCommentList = async (req, res) => {
             where: { userId }
         });
 
-        let commentList = [];
         if (existComment.length === 0) {
             return res.status(201).send({
                 ok: false,
                 errorMessage: '댓글 조회에 실패하였습니다',
             });
-        } else if (existComment !== 0) {
-            for (let i = 0; i < existComment.length; i++) {
-                const comments = await Policy.findOne({
-                    where: { postId: existComment[i].postId },
-                    attributes: ['postId', 'title'],
-                    include: [
-                        {
-                            model: Comment,
-                            attributes: ['commentId', 'content', 'createdAt'],
-                            where: { userId }
-                        }
-                    ]
-                });
-                commentList.push(comments);
-            }
-        }
+        } 
+
+        let comments = await Policy.findAll({
+            attributes: ['postId', 'title'],
+            include: [
+                {
+                    model: Comment,
+                    attributes: ['commentId', 'content', 'createdAt'],
+                    where: { userId }
+                }
+            ],
+            raw: true,
+        });
+
         res.status(200).send({
-            commentList,
+            comments,
         })
     } catch (error) {
         console.log(error);
         res.status(201).send({
             ok: false,
-            errorMessage: '몰?루',
+            errorMessage: 'Could not fetch comments',
         });
     }
 }
