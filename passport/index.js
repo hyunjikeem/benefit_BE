@@ -86,6 +86,7 @@ module.exports = (app) => {
                 callbackURL: process.env.GOOGLE_URL,
             },
             async (accessToken, refreshToken, profile, done) => {
+                console.log('accessToken:', accessToken);
                 console.log('google profile : ', profile);
                 try {
                     const exUser = await User.findOne({
@@ -118,5 +119,4 @@ module.exports = (app) => {
     passport.deserializeUser((user,done)=>{
         done(null,user);
     });
-    // app.set('passport',passport)
 };

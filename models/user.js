@@ -5,17 +5,10 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class User extends Model {
         static associate(models) {
-            // User.hasMany(models.zzim, {
-            //     foreignKey: 'userId',
-            //     sourceKey: 'userId',
-            // });
-            // User.hasMany(models.Comment, {
-            //     foreignKey: 'userId',
-            //     sourceKey: 'userId',
-            // });
+            
             User.hasMany(models.Comment, { foreignKey: 'userId', sourceKey: 'userId', onDelete:'CASCADE' });
             User.hasMany(models.Zzim, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
-
+        
         }
     }
     User.init(
@@ -42,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            timstamps: true,
+            timestamps: true,
             modelName: 'User',
         },
     );

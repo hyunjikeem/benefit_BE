@@ -5,8 +5,10 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Zzim extends Model {
         static associate(models) {
+
             Zzim.belongsTo(models.User, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
             Zzim.belongsTo(models.Policy, { foreignKey: 'postId', sourceKey: 'userId', onDelete: 'CASCADE' });
+        
         }
     }
     Zzim.init(
@@ -25,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            timstamps: true,
+            timestamps: true,
             modelName: 'Zzim',
         },
     );

@@ -2,11 +2,7 @@ const { Comment } = require('../models');
 
 const makeComment = async (req, res) => {
     const { postId, content } = req.body;
-
-    // console.log('콘솔이다!!:', postId, content);
-    // const { postId } = req.params;
     const { userId } = res.locals.user;
-    // console.log('콘솔이다!!2', userId);
 
     if (!content) {
         res.status(200).send({
@@ -38,12 +34,8 @@ const makeComment = async (req, res) => {
 
 const updateComment = async (req, res) => {
     try {
-        // const { CommentId } = req.params;
         const { CommentId, content } = req.body;
-        // const { userId } = req.locals.user;
         console.log('this is console', CommentId, content);
-        // const { commentId } = req.params;
-        // const userId = res.locals.user;
 
         await Comment.update({ content }, { where: { CommentId } });
         return res.status(201).send({
@@ -61,7 +53,6 @@ const updateComment = async (req, res) => {
 const deleteComment = async (req, res) => {
     try {
         const { CommentId } = req.body;
-        // const { CommentId } = req.body;
         
 
         await Comment.destroy({ where: { CommentId } });
