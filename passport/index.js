@@ -22,7 +22,7 @@ module.exports = (app) => {
             try {
                 const exUser = await User.findOne({
                     // 카카오 플랫폼에서 로그인 했고 & snsId필드에 카카오 아이디가 일치할경우
-                    where: { snsId: profile.id, providerType: 'kakao' },
+                    where: { snsId: profile.id, /*providerType: 'kakao'*/ },
                 });
                 // 이미 가입된 카카오 프로필이면 성공
                 if (exUser) {

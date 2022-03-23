@@ -1,7 +1,8 @@
 const passport = require('passport');
 // const Sequelize = require('sequelize');
-// const { User } = require('../models/user');
+const { User } = require('../models');
 const jwt = require('jsonwebtoken');
+
 
 const kakaoCallback = (req, res, next) => {
     passport.authenticate('kakao', { failureRedirect: '/' }, (err, user, info) => {
