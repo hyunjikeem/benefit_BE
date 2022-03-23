@@ -63,7 +63,8 @@ const getCommentList = async (req, res) => {
                             attributes: ['commentId', 'content', 'createdAt'],
                             where: { userId }
                         }
-                    ]
+                    ],
+                    raw: true,
                 });
                 commentList.push(comments);
             }
