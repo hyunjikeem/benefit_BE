@@ -53,7 +53,7 @@ const updateComment = async (req, res) => {
 const deleteComment = async (req, res) => {
     try {
         const { commentId } = req.body;
-        
+        console.log(commentId)
 
         await Comment.destroy({ where: { CommentId : commentId } });
         return res.status(201).send ({
