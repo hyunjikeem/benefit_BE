@@ -55,7 +55,7 @@ const deleteComment = async (req, res) => {
         const { commentId } = req.body;
         
 
-        await Comment.destroy({ where: { commentId } });
+        await Comment.destroy({ where: { CommentId : commentId } });
         return res.status(201).send ({
             ok: true,
             message: '댓글이 삭제되었습니다.',
