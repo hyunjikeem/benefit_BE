@@ -11,4 +11,5 @@ router.get("/main", controller.mainpage);
 router.get("/detail/:postId", freeMiddleware, controller.detailpage);
 
 
+
 module.exports = router;

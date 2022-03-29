@@ -1,7 +1,6 @@
 {
   "dependencies": {
-    "axios": "^0.26.1",
-    "cheerio": "^1.0.0-rc.10",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
@@ -10,11 +9,10 @@
     "mysql2": "^2.3.3",
     "passport": "^0.5.2",
     "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.0",
     "passport-kakao": "^1.0.1",
     "passport-naver-v2": "^2.0.8",
     "passport-oauth2": "^1.6.1",
-    "request": "^2.88.2",
-    "selenium-webdriver": "^4.1.1",
     "sequelize": "^6.17.0",
     "sequelize-cli": "^6.4.1",
     "sync-request": "^6.1.0",

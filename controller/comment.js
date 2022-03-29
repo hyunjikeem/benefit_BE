@@ -2,11 +2,7 @@ const { Comment } = require('../models');
 
 const makeComment = async (req, res) => {
     const { postId, content } = req.body;
-
-    // console.log('콘솔이다!!:', postId, content);
-    // const { postId } = req.params;
     const { userId } = res.locals.user;
-    // console.log('콘솔이다!!2', userId);
 
     if (!content) {
         res.status(200).send({
@@ -38,14 +34,10 @@ const makeComment = async (req, res) => {
 
 const updateComment = async (req, res) => {
     try {
-        // const { CommentId } = req.params;
-        const { CommentId, content } = req.body;
-        // const { userId } = req.locals.user;
-        console.log('this is console', CommentId, content);
-        // const { commentId } = req.params;
-        // const userId = res.locals.user;
+        const { commentId, content } = req.body;
+        console.log('this is console', commentId, content);
 
-        await Comment.update({ content }, { where: { CommentId } });
+        await Comment.update({ content }, { where: { CommentId : commentId } });
         return res.status(201).send({
             ok: true,
             message: '댓글이 수정되었습니다.',
@@ -60,11 +52,10 @@ const updateComment = async (req, res) => {
 
 const deleteComment = async (req, res) => {
     try {
-        const { CommentId } = req.body;
-        // const { CommentId } = req.body;
-        
+        const { commentId } = req.body;
+        console.log(commentId)
 
-        await Comment.destroy({ where: { CommentId } });
+        await Comment.destroy({ where: { CommentId : commentId } });
         return res.status(201).send ({
             ok: true,
             message: '댓글이 삭제되었습니다.',
