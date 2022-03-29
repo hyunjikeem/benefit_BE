@@ -35,9 +35,10 @@ const makeComment = async (req, res) => {
 const updateComment = async (req, res) => {
     try {
         const { commentId, content } = req.body;
+        const { userId } = res.locals.user;
         console.log('this is console', commentId, content);
 
-        await Comment.update({ content }, { where: { CommentId : commentId } });
+        await Comment.update({ content }, { where: { CommentId : commentId, userId: userId } });
         return res.status(201).send({
             ok: true,
             message: '댓글이 수정되었습니다.',
@@ -53,9 +54,10 @@ const updateComment = async (req, res) => {
 const deleteComment = async (req, res) => {
     try {
         const { commentId } = req.body;
+        const { userId } = res.locals.user;
         console.log(commentId)
 
-        await Comment.destroy({ where: { CommentId : commentId } });
+        await Comment.destroy({ where: { CommentId : commentId, userId: userId } });
         return res.status(201).send ({
             ok: true,
             message: '댓글이 삭제되었습니다.',
