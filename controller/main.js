@@ -73,7 +73,7 @@ exports.detailpage = async (req, res) => {
   try {
     const { postId } = req.params; 
     
-    let userId = 2;
+    let userId = 3;
 
     if (res.locals.user) {
        userId  = res.locals.user.userId
@@ -81,14 +81,12 @@ exports.detailpage = async (req, res) => {
       
     const post = await Policy.findOne({
         where: { postId: postId },
-        attributes:{
-          include : ['postId', 'title', 'group', 'location', 'summary', 'category', 
+        attributes:['postId', 'title', 'group', 'location', 'summary', 'category', 
           'benefit_desc', 'benefit', 'apply_period', 'scale', 'age', 'education', 
           'major', 'job_status', 'special', 'process', 'dday', 'apply_site', 
           'operation', 'do_period', 'residence', 'plus', 'submit', 'etc', 
-          'maker', 'reference_site1', 'reference_site2','view',
+          'maker', 'reference_site1','view',
           [sequelize.literal(`(SELECT count(*) FROM Zzims WHERE postId = ${postId} GROUP BY postId)`),'zzim_count']],
-           },
         include : [{
             model: Zzim, 
             required: false,
@@ -106,8 +104,8 @@ exports.detailpage = async (req, res) => {
     INNER JOIN Users as u on u.userId = c.userId WHERE postId =${postId}`,{ type: QueryTypes.SELECT })
 
     const review = await Review.findAll({
-      attributes: ['review_link'],
-      where : { postId }
+      attributes: ['reviewId','review_link',[sequelize.literal(`CASE WHEN userId = ${userId} THEN true ELSE false END`), 'review_status']],
+      where : { postId },
     })
 
     res.json({ post, comment, review});

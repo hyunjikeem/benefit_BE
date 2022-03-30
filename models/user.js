@@ -8,10 +8,8 @@ module.exports = (sequelize, DataTypes) => {
             
             User.hasMany(models.Comment, { foreignKey: 'userId', sourceKey: 'userId', onDelete:'CASCADE' });
             User.hasMany(models.Zzim, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
-            User.hasMany(models.Zzim_folder, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
             User.hasMany(models.Review, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
 
-        
         }
     }
     User.init(
