@@ -3,7 +3,6 @@ node_modules
 config
 mvp.json
 .DS_Store
-passport
 get.js
 chromedriver.exe
 getget.js
