@@ -5,7 +5,7 @@ const { Op } = require('sequelize');
 exports.createReview = async (req, res) => {
     const { postId } = req.params;
     const { userId } = res.locals.user;
-    const { review_link } = res.body;
+    const { review_link } = req.body;
  
 
     try {
@@ -20,13 +20,15 @@ exports.createReview = async (req, res) => {
                    review_link,
                    review_status : true
                 })
-               res.status(200).send((result = {
-                   ok: true,
-               }))
+                const theReview = await Review.findOne({
+                    where : {postId, review_link}
+                })
+                
+               res.status(200).send({reviewId : theReview.reviewId})
        } else {
-               res.status(200).send((result = {
+               res.status(200).send({
                    ok: "이미 존재하는 링크입니다?"
-               }))
+               })
        }
     } catch(error){
         console.log(error);
