@@ -1,4 +1,5 @@
 const { Zzim } = require('../models');
+const { zzim_folder } = require('../models');
 const { Op } = require('sequelize');
 
 
