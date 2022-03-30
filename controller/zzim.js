@@ -1,5 +1,5 @@
 const { Zzim } = require('../models');
-const { zzim_folder } = require('../models');
+const { Zzim_folder } = require('../models');
 const { Op } = require('sequelize');
 
 
@@ -10,9 +10,16 @@ const createZzim = async (req, res) => {
 
 
     try {
+
        const existZzim = await Zzim.findOne({
-           where: { userId, [Op.or]: { postId } }
-       })
+           where: {
+               [Op.and]: [
+                   { userId },
+                   { postId },
+               ],
+               [Op.or]: { folderId },
+           }
+    })
 
        if (!existZzim) {
                await Zzim.create({ userId, postId, zzim_status: true, folderId: folderId })
