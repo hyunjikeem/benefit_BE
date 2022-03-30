@@ -16,7 +16,7 @@ const kakaoCallback = (req, res, next) => {
             nickname: nickname,
             userId,
         };
-        const result2 = await sequelize.query('SELECT zf.folder_name, zf.folderId, zf.folder_status, z.postId FROM ybrn_db.Zzim_folders as zf LEFT JOIN ybrn_db.Zzims as z ON zf.folderId = z.folderId', { type: QueryTypes.SELECT });
+        const result2 = await sequelize.query(`SELECT f.folder_name, f.folderId, f.folder_status, group_concat(z.postId) as postId_list FROM Zzim_folders as f LEFT JOIN Zzims as z on z.folderId = f.folderId where f.userId = ${userId} group by f.folderId;`, { type: QueryTypes.SELECT });
         console.log(result);
         console.log(result2);
         res.send({ user: result, result2 });
