@@ -3,39 +3,39 @@ const Sequelize = require('sequelize');
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Review extends Model {
+    class Zzim_folder extends Model {
         static associate(models) {
 
-            Review.belongsTo(models.User, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
-            Review.belongsTo(models.Policy, { foreignKey: 'postId', sourceKey: 'postId', onDelete: 'CASCADE' });
+            Zzim_folder.hasMany(models.Zzim, { foreignKey: 'folderId', sourceKey: 'folderId', onDelete: 'CASCADE' });
+            Zzim_folder.belongsTo(models.User, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
+
         
         }
     }
-    Review.init(
+    Zzim_folder.init(
         {
-            reviewId: {
+            folderId: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
 
-            review_link: {
+            folder_name: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            
-            review_status: {
-                allowNull: false,
-                type: Sequelize.BOOLEAN,
-            }
 
+            folder_status: {
+                allowNull: false,
+                type:Sequelize.BOOLEAN,
+            }
         },
         {
             sequelize,
             timestamps: true,
-            modelName: 'Review',
+            modelName: 'Zzim_folder',
         },
     );
-    return Review;
+    return Zzim_folder;
 };

@@ -5,14 +5,10 @@ module.exports = (sequelize, DataTypes) => {
     class Policy extends Model {
         static associate(models) {
             //테이블과 테이블의 관계를 설정
-            Policy.hasMany(models.Comment, { foreignKey: 'postId', as : 'pI' ,sourceKey: 'postId', onDelete: 'CASCADE' });
+            Policy.hasMany(models.Comment, { foreignKey: 'postId', sourceKey: 'postId', onDelete: 'CASCADE' });
             Policy.hasMany(models.Zzim, { foreignKey: 'postId', sourceKey: 'postId', onDelete: 'CASCADE' });
-<<<<<<< HEAD
             Policy.hasMany(models.Review, { foreignKey: 'postId', sourceKey: 'postId', onDelete: 'CASCADE' });
-        }
-=======
         } 
->>>>>>> 413048a54063ce7704e9348b06f2e855d4b3aa5f
 
     }
     Policy.init(
