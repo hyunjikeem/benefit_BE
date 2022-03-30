@@ -73,7 +73,7 @@ exports.detailpage = async (req, res) => {
   try {
     const { postId } = req.params; 
     
-    let userId = 3;
+    let userId = 0;
 
     if (res.locals.user) {
        userId  = res.locals.user.userId
