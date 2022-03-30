@@ -10,7 +10,7 @@ exports.createReview = async (req, res) => {
 
     try {
        const exist_link = await Review.findOne({
-           where: { review_link, postId }
+           where: { review_link }
        })
 
        if (!exist_link) {
