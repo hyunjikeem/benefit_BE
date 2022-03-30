@@ -5,11 +5,6 @@ const { Sequelize, sequelize } = require('../models')
 
 
 const getPolicy = async (req, res) => {
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 413048a54063ce7704e9348b06f2e855d4b3aa5f
     try {
 
         const c0 = await Policy.findAll({
