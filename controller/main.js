@@ -4,6 +4,7 @@ const Policy = db.Policy;
 const Zzim = db.Zzim;
 const Comment = db.Comment;
 const User = db.User;
+const Review = db.Review;
 const { QueryTypes } = require('sequelize');
 const { fn, col } = Policy.sequelize;
 
@@ -104,7 +105,12 @@ exports.detailpage = async (req, res) => {
     const comment = await sequelize.query(`SELECT c.CommentId as commentId, c.createdAt as insert_time, c.content, replace( u.nickname, substr(u.nickname, 2), '****') as nickname FROM Comments as c 
     INNER JOIN Users as u on u.userId = c.userId WHERE postId =${postId}`,{ type: QueryTypes.SELECT })
 
-    res.json({ post,  comment});
+    const review = await Review.findAll({
+      attributes: ['review_link'],
+      where : { postId }
+    })
+
+    res.json({ post, comment, review});
   } catch (error) {
     console.error(error)
     res.status(400).json({ result : 'false'})
