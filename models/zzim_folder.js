@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 
             Zzim_folder.hasMany(models.Zzim, { foreignKey: 'folderId', sourceKey: 'folderId', onDelete: 'CASCADE' });
             Zzim_folder.belongsTo(models.User, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
-
+            Zzim_folder.belongsTo(models.User, { foreignKey: 'nickname', sourceKey: 'nickname' });
         
         }
     }

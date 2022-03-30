@@ -1,4 +1,4 @@
-const { Review } = require('../models');
+const { Review, Zzim_folder } = require('../models');
 const { Op } = require('sequelize');
 
 
@@ -48,6 +48,69 @@ exports.deleteReview = async (req, res) => {
     res.status(201).send({ ok: true });
 
     } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            ok: false
+        })
+    }
+
+}
+
+exports.createFolder = async (req, res) => {
+    const { userId, nickname } = res.locals.user;
+    const { folder_name } = req.body;
+ 
+    try {
+     
+        await Zzim_folder.create({ 
+           userId,
+           folder_name,
+           folder_status : false,
+           nickname
+        })
+
+        const theFolder = await Zzim_folder.findOne({where : {userId, folder_name, folder_status : false}})
+                
+        res.status(200).send({folderId : theFolder.folderId})
+     
+    } catch(error){
+        console.log(error);
+        res.status(400).send({
+            ok: false
+        })
+    }
+
+}
+
+exports.updateFolder = async (req, res) => {
+    try {
+
+    const { folderId, folder_name, folder_status } = req.body;
+    const { userId } = res.locals.user;
+    
+    await Zzim_folder.update({ folder_name, folder_status }, { where: { folderId, userId } });    
+    res.status(201).send({ ok: true });
+
+    } catch (error) {
+
+        console.log(error)
+        res.status(400).send({ok: false})
+
+    }
+
+}
+
+exports.deleteFolder = async (req, res) => {
+    try {
+    const { folderId } = req.body;
+    const { userId } = res.locals.user;
+    
+    await Zzim_folder.destroy({where: { folderId , userId} })
+    
+    res.status(201).send({ ok: true });
+
+    } catch (error) {
+
         console.log(error)
         res.status(400).send({
             ok: false
