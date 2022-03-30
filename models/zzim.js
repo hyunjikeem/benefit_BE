@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
 
             Zzim.belongsTo(models.User, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'CASCADE' });
-            Zzim.belongsTo(models.Policy, { foreignKey: 'postId', sourceKey: 'userId', onDelete: 'CASCADE' });
+            Zzim.belongsTo(models.Policy, { foreignKey: 'postId', sourceKey: 'userId', onDelete: 'CASCADE' });            Zzim.belongsTo(models.Policy, { foreignKey: 'postId', sourceKey: 'userId', onDelete: 'CASCADE' });
+            Zzim.belongsTo(models.Zzim_folder, { foreignKey: 'folderId', sourceKey: 'folderId', onDelete: 'CASCADE' });
         
         }
     }
