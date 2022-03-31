@@ -16,6 +16,21 @@ const kakaoCallback = (req, res, next) => {
             nickname: nickname,
             userId,
         };
+        
+        const find_folder = await Zzim_folder.findOne({
+            where: { userId }
+        });
+
+        if (!find_folder) {
+
+            await Zzim_folder.create({ 
+                userId,
+                folder_name: '기본 폴더',
+                folder_status : false,
+                nickname
+             })
+        }
+
         const result2 = await sequelize.query(`SELECT f.folder_name, f.folderId, f.folder_status, group_concat(z.postId) as postId_list FROM Zzim_folders as f LEFT JOIN Zzims as z on z.folderId = f.folderId where f.userId = ${userId} group by f.folderId;`, { type: QueryTypes.SELECT });
         console.log(result);
         console.log(result2);
