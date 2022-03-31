@@ -1,19 +1,59 @@
 const { Policy } = require('../models');
 const { Op } = require('sequelize');
-const { Zzim } = require('../models')
+const { Zzim } = require('../models');
+const { type } = require('express/lib/response');
 const { fn, col } = Policy.sequelize;
 
 
 exports.searchResults = async (req, res) => {
     try {
-      console.log('a')
-      const {location, benefit, education, job_status, txt, limit, special_limit, apply_period } = req.body;
       
+      const {location, benefit, education, job_status, txt, limit, special_limit, apply_period, paging, category, order } = req.body;
+
+
+      // 더보기 (페이지네이션을 위한 초기작업)
+      let c0_paging = 10
+      let c1_paging = 10
+      let c2_paging = 10
+      let c3_paging = 10
+      let c4_paging = 10
+      let c5_paging = 10
+      let c6_paging = 10
+
+      
+      for (let i of category) {
+        if (i === "주거·금융") {
+          c1_paging = parseInt((c1_paging * paging) / category.length)
+        } else if (i ===  "코로나19") {
+          c2_paging = parseInt((c2_paging * paging) / category.length)
+        } else if (i ===  "창업지원") {
+          c3_paging = parseInt((c3_paging * paging) / category.length)
+        } else if (i ===  "생활·복지") {
+          c4_paging = parseInt((c4_paging * paging) / category.length)
+        } else if (i ===  "정책참여") {
+          c5_paging = parseInt((c5_paging * paging) / category.length)
+        } else if (i ===  "취업지원") {
+          c6_paging = parseInt((c6_paging * paging) / category.length)
+        } else if (i ===  "all") {
+          c0_paging = parseInt((c0_paging * paging) / category.length)
+        }
+      }
+
+      let orderCol = 'view'
+      let orderHow = 'DESC'
+
+      if (order === "마감임박순") {
+        
+      }
+
+
+
+      // 유저마다 찜을 했는지 안했는지 다르게 표시해주기 위해
       let userId = 0;
 
-    if (res.locals.user) {
-       userId  = res.locals.user.userId
-    }
+      if (res.locals.user) {
+         userId  = res.locals.user.userId
+      }
 
       
       //지원기간 (apply_period)
@@ -140,6 +180,8 @@ exports.searchResults = async (req, res) => {
         specialWords.push({ without: { [Op.or] : [ { [Op.like]: '%제한%없음%' }, { [Op.like]: '-' } ]}})
      }
       
+
+     //전체 뿌리기
       const c0 = await Policy.findAll({
           attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
           where: {
@@ -162,7 +204,9 @@ exports.searchResults = async (req, res) => {
             ],
             where : { userId },
           }], 
-          raw : true
+          raw : true,
+          limit : c0_paging,
+          order: [ [ orderCol, orderHow ] ]
       });
 
     const c1 = await Policy.findAll({
@@ -188,7 +232,8 @@ exports.searchResults = async (req, res) => {
         ],
         where : { userId}
       }],
-      raw : true
+      raw : true,
+      limit : c1_paging
   });
   const c2 = await Policy.findAll({
     attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -213,7 +258,8 @@ exports.searchResults = async (req, res) => {
       ],
       where : { userId : userId},
     }],
-    raw : true
+    raw : true,
+    limit : c2_paging
 });
     const c3 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -238,7 +284,8 @@ exports.searchResults = async (req, res) => {
         ],
         where : { userId },
       }],
-      raw : true
+      raw : true,
+      limit : c3_paging
 });
     const c4 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -263,7 +310,8 @@ exports.searchResults = async (req, res) => {
         ],
         where : { userId },
       }],
-      raw : true
+      raw : true,
+      limit : c4_paging
 });
     const c5 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -288,7 +336,8 @@ exports.searchResults = async (req, res) => {
         ],
         where : { userId},
       }],
-      raw : true
+      raw : true,
+      limit : c5_paging
 });
 const c6 = await Policy.findAll({
   attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -313,7 +362,8 @@ const c6 = await Policy.findAll({
     ],
     where : { userId},
   }],
-  raw : true
+  raw : true,
+  limit : c6_paging,
 });
       
       res.json({ c0,c1,c2,c3,c4,c5,c6 });
