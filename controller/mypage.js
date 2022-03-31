@@ -50,7 +50,7 @@ const getCommentList = async (req, res) => {
         } 
 
         let comments = await Policy.findAll({
-            attributes: ['postId', 'title'],
+            attributes: ['postId', 'title', 'benefit'],
             include: [
                 {
                     model: Comment,
