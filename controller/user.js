@@ -1,5 +1,6 @@
 const passport = require('passport');
 // const sequelize = require('sequelize');
+const { Zzim_folder } = require('../models');
 const { sequelize } = require('../models');
 const { QueryTypes } = require('sequelize');
 const jwt = require('jsonwebtoken');
