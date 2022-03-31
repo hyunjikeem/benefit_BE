@@ -23,29 +23,29 @@ exports.searchResults = async (req, res) => {
       
       for (let i of category) {
         if (i === "주거·금융") {
-          c1_paging = parseInt((c1_paging * paging) / category.length)
+          c1_paging = Math.ceil((c1_paging * paging) / category.length)
         } else if (i ===  "코로나19") {
-          c2_paging = parseInt((c2_paging * paging) / category.length)
+          c2_paging = Math.ceil((c2_paging * paging) / category.length)
         } else if (i ===  "창업지원") {
-          c3_paging = parseInt((c3_paging * paging) / category.length)
+          c3_paging = Math.ceil((c3_paging * paging) / category.length)
         } else if (i ===  "생활·복지") {
-          c4_paging = parseInt((c4_paging * paging) / category.length)
+          c4_paging = Math.ceil((c4_paging * paging) / category.length)
         } else if (i ===  "정책참여") {
-          c5_paging = parseInt((c5_paging * paging) / category.length)
+          c5_paging = Math.ceil((c5_paging * paging) / category.length)
         } else if (i ===  "취업지원") {
-          c6_paging = parseInt((c6_paging * paging) / category.length)
+          c6_paging = Math.ceil((c6_paging * paging) / category.length)
         } else if (i ===  "all") {
-          c0_paging = parseInt((c0_paging * paging) / category.length)
+          c0_paging = Math.ceil((c0_paging * paging) / category.length)
         }
       }
 
-      // 정렬을 위한
+      // 정렬을 위한 작업
       let orderCol = 'view'
       let orderHow = 'DESC'
 
       if (order === "마감임박순") {
         orderCol = 'apply_end'
-        orderHow = 
+        orderHow = 'ASC'
       }
 
 
@@ -235,7 +235,8 @@ exports.searchResults = async (req, res) => {
         where : { userId}
       }],
       raw : true,
-      limit : c1_paging
+      limit : c1_paging,
+      order: [ [ orderCol, orderHow ] ]
   });
   const c2 = await Policy.findAll({
     attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -261,7 +262,8 @@ exports.searchResults = async (req, res) => {
       where : { userId : userId},
     }],
     raw : true,
-    limit : c2_paging
+    limit : c2_paging,
+    order: [ [ orderCol, orderHow ] ]
 });
     const c3 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -287,7 +289,8 @@ exports.searchResults = async (req, res) => {
         where : { userId },
       }],
       raw : true,
-      limit : c3_paging
+      limit : c3_paging,
+      order: [ [ orderCol, orderHow ] ]
 });
     const c4 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -313,7 +316,8 @@ exports.searchResults = async (req, res) => {
         where : { userId },
       }],
       raw : true,
-      limit : c4_paging
+      limit : c4_paging,
+      order: [ [ orderCol, orderHow ] ]
 });
     const c5 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -339,7 +343,8 @@ exports.searchResults = async (req, res) => {
         where : { userId},
       }],
       raw : true,
-      limit : c5_paging
+      limit : c5_paging,
+      order: [ [ orderCol, orderHow ] ]
 });
 const c6 = await Policy.findAll({
   attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
@@ -366,6 +371,7 @@ const c6 = await Policy.findAll({
   }],
   raw : true,
   limit : c6_paging,
+  order: [ [ orderCol, orderHow ] ]
 });
       
       res.json({ c0,c1,c2,c3,c4,c5,c6 });

@@ -13,6 +13,13 @@ const { fn, col } = Policy.sequelize;
 // 메인페이지로 줄 정보 
 exports.mainpage = async (req, res) => {
   try {
+
+    let userId = 0;
+
+    if (res.locals.user) {
+       userId  = res.locals.user.userId
+    }
+
     const todayBest = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', 'summary', 'location',[fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 
        'view',],
@@ -62,7 +69,13 @@ exports.mainpage = async (req, res) => {
     });
     const categoryBest = [c1,c2,c3,c4,c5,c6];
 
-    res.json({ todayBest, categoryBest })
+    const mainReview = await Review.findAll({
+      attributes: ['reviewId','review_link',[sequelize.literal(`CASE WHEN userId = ${userId} THEN true ELSE false END`), 'review_status']],
+      order : [['reviewId', 'ASC']],
+      limit : 4
+    })
+
+    res.json({ todayBest, categoryBest, mainReview })
   } catch (error) {
     console.error(error)
     res.status(400).json({ result : 'false'})
