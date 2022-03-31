@@ -1,4 +1,4 @@
-const { Zzim, Policy, User, Comment } = require('../models');
+const { Zzim, Policy, User, Comment, Zzim_folder } = require('../models');
 const { sequelize } = require('../models');
 const { QueryTypes } = require('sequelize');
 
@@ -8,7 +8,7 @@ const getZzimList = async (req,res) => {
         const { userId } = res.locals.user;
     
         // const existUser = await User.findOne({ where: { userId }});
-        const existZzim = await Zzim.findAll({ where: { userId }, raw: true });
+        const existZzim = await Zzim_folder.findAll({ where: { userId }, raw: true });
     
         let list = [];
         if (existZzim.length === 0) {
