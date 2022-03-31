@@ -68,6 +68,8 @@ exports.mainpage = async (req, res) => {
     res.status(400).json({ result : 'false'})
   } 
 };
+
+
 // 상세 페이지로 줄 정보 
 exports.detailpage = async (req, res) => {
   try {
@@ -85,14 +87,18 @@ exports.detailpage = async (req, res) => {
           'benefit_desc', 'benefit', 'apply_period', 'scale', 'age', 'education', 
           'major', 'job_status', 'special', 'process', 'dday', 'apply_site', 
           'operation', 'do_period', 'residence', 'plus', 'submit', 'etc', 
-          'maker', 'reference_site1','view',
+          'maker','view',
+          [sequelize.literal(`(SELECT coalesce(
+            (select reference_site1 from policies as p1 where reference_site1 like '%http%' and p.postId = p1.postId),
+            (select reference_site2 from policies as p2 where reference_site2 like '%http%' and p.postId = p2.postId),
+            concat("https://www.youthcenter.go.kr/youngPlcyUnif/youngPlcyUnifDtl.do?bizId=",p.policyNum)) FROM policies as p
+            where p.postId = ${postId})`), 'reference_site'],
           [sequelize.literal(`(SELECT count(*) FROM Zzims WHERE postId = ${postId} GROUP BY postId)`),'zzim_count']],
         include : [{
             model: Zzim, 
             required: false,
             attributes: [
-              [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
-              
+              [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]             
             ],
             where : { userId }
           }],
@@ -100,8 +106,8 @@ exports.detailpage = async (req, res) => {
     });
     await Policy.update({ view : Policy.sequelize.literal('view + 1') }, { where: { postId : postId } });
     
-    const comment = await sequelize.query(`SELECT c.CommentId as commentId, c.createdAt as insert_time, c.content, replace( u.nickname, substr(u.nickname, 2), '****') as nickname FROM Comments as c 
-    INNER JOIN Users as u on u.userId = c.userId WHERE postId =${postId}`,{ type: QueryTypes.SELECT })
+    const comment = await sequelize.query(`SELECT c.CommentId as commentId, c.createdAt as insert_time, c.content, replace( u.nickname, substr(u.nickname, 2), '****') as nickname 
+    FROM Comments as c INNER JOIN Users as u on u.userId = c.userId WHERE postId =${postId}`,{ type: QueryTypes.SELECT })
 
     const review = await Review.findAll({
       attributes: ['reviewId','review_link',[sequelize.literal(`CASE WHEN userId = ${userId} THEN true ELSE false END`), 'review_status']],
