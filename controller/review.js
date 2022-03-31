@@ -102,7 +102,7 @@ exports.updateFolder = async (req, res) => {
 
 exports.deleteFolder = async (req, res) => {
     try {
-    const { folderId } = req.body;
+    const folderId  = req.body;
     const { userId } = res.locals.user;
     
     await Zzim_folder.destroy({where: { folderId , userId} })
