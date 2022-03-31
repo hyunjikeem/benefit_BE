@@ -29,10 +29,13 @@ const zzimRouter = require('./routes/zzim');
 const searchRouter = require('./routes/search');
 const mypageRouter = require('./routes/mypage');
 const adminRouter = require('./routes/admin');
+const curationRouter = require('./routes/curation');
 const reviewRouter = require('./routes/review');
 
+
 app.use('/auth', [userRouter]);
-app.use([mainRouter, commentRouter, zzimRouter, searchRouter, mypageRouter, adminRouter, reviewRouter]);
+app.use([mainRouter, commentRouter, zzimRouter, searchRouter, mypageRouter, adminRouter, curationRouter, reviewRouter]);
+
 
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);

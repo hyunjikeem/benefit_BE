@@ -1,5 +1,7 @@
 const { Zzim, Policy, User, Comment } = require('../models');
 const { sequelize } = require('../models');
+const { QueryTypes } = require('sequelize');
+
 
 const getZzimList = async (req,res) => {
     try {
@@ -8,31 +10,25 @@ const getZzimList = async (req,res) => {
         // const existUser = await User.findOne({ where: { userId }});
         const existZzim = await Zzim.findAll({ where: { userId }, raw: true });
     
-        let ZzimList = [];
+        let list = [];
         if (existZzim.length === 0) {
             return res.status(200).send({
                 ok: false,
                 errorMessage: '찜 리스트 조회에 실패하였습니다'
             })
         } else if (existZzim !== 0){
-            for (let i = 0; i < existZzim.length; i++) {
-                const Zzim = await Policy.findOne({
-                    where: {
-                        postId: existZzim[i].postId,
-                    },
-                    attributes: ['postId', 'category', 'benefit', 'title', 'apply_period', 'view', 'operation'],
-                });
-                ZzimList.push(Zzim);
-            }
+                const Zzim = await sequelize.query(`SELECT folder_name, folderId, folder_status, (select benefit from Zzims as z INNER JOIN policies as p on z.postId = p.postId and f.folderId = z.folderId limit 1) as benefit, (select p.category from Zzims as z INNER JOIN policies as p on z.postId = p.postId and f.folderId = z.folderId limit 1 offset 0 ) as c1, (select p.category from Zzims as z INNER JOIN policies as p on z.postId = p.postId and f.folderId = z.folderId limit 1 offset 1) as c2, (select p.category from Zzims as z INNER JOIN policies as p on z.postId = p.postId and f.folderId = z.folderId limit 1 offset 2) as c3, (select p.category from Zzims as z INNER JOIN policies as p on z.postId = p.postId and f.folderId = z.folderId limit 1 offset 3) as c4 from Zzim_folders as f where f.userId = ${userId}`, { type: QueryTypes.SELECT });
+                list.push(Zzim);
+                
             res.status(201).send({
-                ZzimList,
+                list,
             });
         }
     } catch(error) {
         console.log(error);
         res.status(201).send({
             ok: false,
-            errorMessage: '몰?루',
+            errorMessage: 'Could not fetch zzims',
         });
     }
 };

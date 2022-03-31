@@ -1,11 +1,12 @@
 const passport = require('passport');
-// const Sequelize = require('sequelize');
-const { User } = require('../models');
+// const sequelize = require('sequelize');
+const { sequelize } = require('../models');
+const { QueryTypes } = require('sequelize');
 const jwt = require('jsonwebtoken');
 
 
 const kakaoCallback = (req, res, next) => {
-    passport.authenticate('kakao', { failureRedirect: '/' }, (err, user, info) => {
+    passport.authenticate('kakao', { failureRedirect: '/' }, async (err, user, info) => {
         if (err) return next(err);
         const { userId, nickname } = user;
         const token = jwt.sign({ userId: userId }, process.env.TOKENKEY);
@@ -15,8 +16,10 @@ const kakaoCallback = (req, res, next) => {
             nickname: nickname,
             userId,
         };
+        const result2 = await sequelize.query(`SELECT f.folder_name, f.folderId, f.folder_status, group_concat(z.postId) as postId_list FROM Zzim_folders as f LEFT JOIN Zzims as z on z.folderId = f.folderId where f.userId = ${userId} group by f.folderId;`, { type: QueryTypes.SELECT });
         console.log(result);
-        res.send({ user: result });
+        console.log(result2);
+        res.send({ user: result, result2 });
     })(req, res, next);
 };
 
