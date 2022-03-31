@@ -39,11 +39,13 @@ exports.searchResults = async (req, res) => {
         }
       }
 
+      // 정렬을 위한
       let orderCol = 'view'
       let orderHow = 'DESC'
 
       if (order === "마감임박순") {
-        
+        orderCol = 'apply_end'
+        orderHow = 
       }
 
 
