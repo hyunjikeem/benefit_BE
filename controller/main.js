@@ -70,8 +70,8 @@ exports.mainpage = async (req, res) => {
     const categoryBest = [c1,c2,c3,c4,c5,c6];
 
     const mainReview = await Review.findAll({
-      attributes: ['reviewId','review_link',[sequelize.literal(`CASE WHEN userId = ${userId} THEN true ELSE false END`), 'review_status']],
-      order : [['reviewId', 'ASC']],
+      attributes: ['reviewId','review_link'],
+      order : [['reviewId', 'DESC']],
       limit : 4
     })
 

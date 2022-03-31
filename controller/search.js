@@ -8,7 +8,7 @@ const { fn, col } = Policy.sequelize;
 exports.searchResults = async (req, res) => {
     try {
       
-      const {location, benefit, education, job_status, txt, limit, special_limit, apply_period, paging, category, order } = req.body;
+      const {location, benefit, education, job_status, txt, age, major, special_limit, apply_period, paging, category, order } = req.body;
 
 
       // 더보기 (페이지네이션을 위한 초기작업)
@@ -91,6 +91,7 @@ exports.searchResults = async (req, res) => {
           txtWords.push({ title: { [Op.like]: '%%' } })
       } else {
           txtWords.push({ title: { [Op.like]: `%${txt}%` } })
+          txtWords.push({ location: { [Op.like]: `%${txt}%` } })
           txtWords.push({ summary: { [Op.like]: `%${txt}%` } })
           txtWords.push({ benefit_desc: { [Op.like]: `%${txt}%` } })
       }
@@ -154,31 +155,35 @@ exports.searchResults = async (req, res) => {
           jobWords.push({ job_status: { [Op.and] : [ { [Op.notLike] : '%미취업%' }, { [Op.notLike] : '%자영업%' }, { [Op.notLike] : '%창업%' }, { [Op.notLike] : '%제한%없음%' }, { [Op.notLike] : '%구직자%' }, { [Op.notLike] : '%취업%준비%' },{ [Op.notLike] : '%재직자%' },{ [Op.notLike] : '%중소%' },]}})
      } 
 
-     // 전공, 나이 제한 (job, major)
-     let limitWords = [];
-     let limit_status = { [Op.or]: limitWords }
-     if (limit === 'all') {
-        limitWords.push({ age: { [Op.like]: '%%' } })
-     } else if (limit === 'true') {
-        limitWords.push({ age: { [Op.and] : [ { [Op.notLike] : '%제한%없음%' }, { [Op.notLike] : '-' },]}})
-        limitWords.push({ major: { [Op.and] : [ { [Op.notLike] : '%제한%없음%' }, { [Op.notLike] : '-' },]}})
+
+     // 나이 제한
+     let ageWords = [];
+     if (age === 'all') {
+        ageWords.push({ age: { [Op.like]: '%%' } })
+     } else if (age === 'true') {
+        ageWords.push({ age: { [Op.and] : [ { [Op.notLike] : '%제한%없음%' }, { [Op.notLike] : '-' },]}})
      } else  {
-        limit_status = { [Op.and] : limitWords }
-        limitWords.push({ age: { [Op.or] : [ { [Op.like]: '%제한%없음%' }, { [Op.like]: '-' } ]}})
-        limitWords.push({ major: { [Op.or] : [ { [Op.like]: '%제한%없음%' }, { [Op.like]: '-' } ]}})
+        ageWords.push({ age: { [Op.or] : [ { [Op.like]: '%제한%없음%' }, { [Op.like]: '-' } ]}})
      }
+
+     // 전공 제한
+     let majorWords = [];
+     if (major === 'all') {
+        majorWords.push({ major: { [Op.like]: '%%' } })
+     } else if (major === 'true') {
+        majorWords.push({ major: { [Op.and] : [ { [Op.notLike] : '%제한%없음%' }, { [Op.notLike] : '-' },]}})
+     } else  {
+        majorWords.push({ age: { [Op.or] : [ { [Op.like]: '%제한%없음%' }, { [Op.like]: '-' } ]}})
+     }
+
 
      // 기타 제한 사항 
      let specialWords = [];
-     let special_status = { [Op.or]: specialWords }
      if (special_limit === 'all') {
-        specialWords.push({ special: { [Op.like]: '%%' } })
+        specialWords.push({ without: { [Op.like]: '%%' } })
      } else if (special_limit === 'true') {
-        specialWords.push({ special: { [Op.and] : [ { [Op.notLike] : '%제한%없음%' }, { [Op.notLike] : '-' },]}})
         specialWords.push({ without: { [Op.and] : [ { [Op.notLike] : '%제한%없음%' }, { [Op.notLike] : '-' },]}})
      } else  {
-        special_status = { [Op.and] : specialWords }
-        specialWords.push({ special: { [Op.or] : [ { [Op.like]: '%제한%없음%' }, { [Op.like]: '-' } ]}})
         specialWords.push({ without: { [Op.or] : [ { [Op.like]: '%제한%없음%' }, { [Op.like]: '-' } ]}})
      }
       
@@ -356,8 +361,9 @@ const c6 = await Policy.findAll({
           { [Op.or]: benefitWords },
           { [Op.or]: educationWords },
           { [Op.or]: jobWords },
-          limit_status,
-          special_status,
+          { [Op.or]: ageWords },
+          { [Op.or]: majorWords },
+          { [Op.or]: specialWords},
           { [Op.or]: applyWords },
     ]
   }, 
