@@ -38,10 +38,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: Sequelize.STRING(100), 
                 allowNull: false,
             },
-            summary: {
-                type: Sequelize.STRING(1000), 
-                allowNull: false,
-            },
             benefit_desc: {
                 type: Sequelize.STRING(2000), 
             },
@@ -50,15 +46,6 @@ module.exports = (sequelize, DataTypes) => {
             },
             benefit_tmp: {
                 type: Sequelize.STRING(100), 
-            },
-            apply_period: {
-                type: Sequelize.STRING(500), 
-            },
-            apply_start: {
-                type: Sequelize.STRING(255), 
-            },
-            apply_end: {
-                type: Sequelize.STRING(255),
             },
             scale: {
                 type: Sequelize.STRING(500), 
@@ -118,6 +105,19 @@ module.exports = (sequelize, DataTypes) => {
                 type: Sequelize.STRING(500), 
             },
             reference_site2: {
+                type: Sequelize.STRING(500), 
+            },
+            summary: {
+                type: Sequelize.STRING(1000), 
+                allowNull: false,
+            },
+            apply_end: {
+                type: Sequelize.STRING(255),
+            },
+            apply_start: {
+                type: Sequelize.STRING(255), 
+            },
+            apply_period: {
                 type: Sequelize.STRING(500), 
             },
             view: {
