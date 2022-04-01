@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             policyNum: {
                 type: Sequelize.STRING(100), 
+                allowNull: false,
             },
             category: {
                 type: Sequelize.STRING(100), 
@@ -43,27 +44,21 @@ module.exports = (sequelize, DataTypes) => {
             },
             benefit_desc: {
                 type: Sequelize.STRING(2000), 
-                allowNull: false,
             },
             benefit: {
                 type: Sequelize.STRING(100), 
-                allowNull: false,
             },
             benefit_tmp: {
                 type: Sequelize.STRING(100), 
-                allowNull: false,
             },
             apply_period: {
                 type: Sequelize.STRING(500), 
-                allowNull: false,
             },
             apply_start: {
-                type: Sequelize.DATEONLY, 
-                allowNull: false,
+                type: Sequelize.STRING(255), 
             },
             apply_end: {
-                type: Sequelize.DATEONLY, 
-                allowNull: false,
+                type: Sequelize.STRING(255),
             },
             scale: {
                 type: Sequelize.STRING(500), 
