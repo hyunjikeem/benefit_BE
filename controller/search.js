@@ -59,19 +59,19 @@ exports.searchResults = async (req, res) => {
 
       
       //지원기간 (apply_period)
-      const today = new Date();
-      // const fourteen = new Date(now.setDate(now.getDate() + 14))
-      // const year = today.getFullYear();
-      // const month = ('0' + (today.getMonth() + 1)).slice(-2);
-      // const day = ('0' + today.getDate()).slice(-2);
+      const now= new Date();
+      const today = new Date(now.setDate(now.getDate() + 14))
+      const year = today.getFullYear();
+      const month = ('0' + (today.getMonth() + 1)).slice(-2);
+      const day = ('0' + today.getDate()).slice(-2);
 
-      // const dateString = year + '-' + month  + '-' + day;
+      const todayString = year + '-' + month  + '-' + day;
       
       
       let applyWords = [];
       for (let i of apply_period) {
           if ( i === 'all') {
-            applyWords.push({ apply_period: { [Op.like]: '%%' } })
+            applyWords.push({ end: { [Op.like]: '%%' } })
           } else if ( i === '상시') {
             applyWords.push({ apply_period: { [Op.like]: '%%' } })
           } else if ( i === '선착순') {
@@ -193,6 +193,7 @@ exports.searchResults = async (req, res) => {
           attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
           where: {
               [Op.and] : [
+                  {state : "게제중"},
                   { [Op.or]: txtWords },
                   { [Op.or]: locationWords },
                   { [Op.or]: benefitWords },
@@ -222,6 +223,7 @@ exports.searchResults = async (req, res) => {
       where: {
           [Op.and] : [
               {category : "주거·금융"},
+              {state : "게제중"},
               { [Op.or]: txtWords },
               { [Op.or]: locationWords },
               { [Op.or]: benefitWords },
@@ -250,6 +252,7 @@ exports.searchResults = async (req, res) => {
     where: {
         [Op.and] : [
             {category : "코로나19"},
+            {state : "게제중"},
             { [Op.or]: txtWords },
             { [Op.or]: locationWords },
             { [Op.or]: benefitWords },
@@ -278,6 +281,7 @@ exports.searchResults = async (req, res) => {
       where: {
           [Op.and] : [
               {category : "창업지원"},
+              {state : "게제중"},
               { [Op.or]: txtWords },
               { [Op.or]: locationWords },
               { [Op.or]: benefitWords },
@@ -306,6 +310,7 @@ exports.searchResults = async (req, res) => {
       where: {
           [Op.and] : [
               {category : "생활·복지"},
+              {state : "게제중"},
               { [Op.or]: txtWords },
               { [Op.or]: locationWords },
               { [Op.or]: benefitWords },
@@ -334,6 +339,7 @@ exports.searchResults = async (req, res) => {
       where: {
           [Op.and] : [
               {category : "정책참여"},
+              {state : "게제중"},
               { [Op.or]: txtWords },
               { [Op.or]: locationWords },
               { [Op.or]: benefitWords },
@@ -362,6 +368,7 @@ const c6 = await Policy.findAll({
   where: {
       [Op.and] : [
           {category : "취업지원"},
+          {state : "게제중"},
           { [Op.or]: txtWords },
           { [Op.or]: locationWords },
           { [Op.or]: benefitWords },

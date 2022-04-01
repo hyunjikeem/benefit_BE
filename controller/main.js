@@ -31,6 +31,7 @@ exports.mainpage = async (req, res) => {
             ],
             where : { userId : 2}
           }],
+        where: { state : "게제중" },
         order: [['view','DESC']],
         limit: 5,
         raw : true,
@@ -39,32 +40,32 @@ exports.mainpage = async (req, res) => {
     
     const c1 = await Policy.findOne({
         attributes:['postId', 'category', 'benefit', 'title', 'summary', 'location', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view'],
-        where: { category: '주거·금융' },
+        where: { category: '주거·금융', state : "게제중" },
         order: [['view','DESC']],
     });
     const c2 = await Policy.findOne({
         attributes:['postId', 'category', 'benefit', 'title', 'summary', 'location', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view'],
-        where: { category: '코로나19' },
+        where: { category: '코로나19', state : "게제중" },
         order: [['view','DESC']],
     });
     const c3 = await Policy.findOne({
         attributes:['postId', 'category', 'benefit', 'title', 'summary', 'location', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view'],
-        where: { category: '창업지원' },
+        where: { category: '창업지원', state : "게제중" },
         order: [['view','DESC']],
     });
     const c4 = await Policy.findOne({
         attributes:['postId', 'category', 'benefit', 'title', 'summary', 'location', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view'],
-        where: { category: '생활·복지' },
+        where: { category: '생활·복지', state : "게제중" },
         order: [['view','DESC']],
     });
     const c5 = await Policy.findOne({
         attributes:['postId', 'category', 'benefit', 'title', 'summary', 'location', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view'],
-        where: { category: '정책참여' },
+        where: { category: '정책참여', state : "게제중" },
         order: [['view','DESC']],
     });
     const c6 = await Policy.findOne({
         attributes:['postId', 'category', 'benefit', 'title', 'summary', 'location', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view'],
-        where: { category: '취업지원' },
+        where: { category: '취업지원', state : "게제중" },
         order: [['view','DESC']],
     });
     const categoryBest = [c1,c2,c3,c4,c5,c6];
@@ -133,3 +134,6 @@ exports.detailpage = async (req, res) => {
     res.status(400).json({ result : 'false'})
   }  
 };
+
+
+
