@@ -71,7 +71,7 @@ exports.searchResults = async (req, res) => {
       let applyWords = [];
       for (let i of apply_period) {
           if ( i === 'all') {
-            applyWords.push({ end: { [Op.like]: '%%' } })
+            applyWords.push({ apply_period: { [Op.like]: '%%' } })
           } else if ( i === '상시') {
             applyWords.push({ apply_period: { [Op.like]: '%%' } })
           } else if ( i === '선착순') {
