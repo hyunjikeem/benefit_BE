@@ -73,7 +73,7 @@ exports.searchResults = async (req, res) => {
           if ( i === 'all') {
             applyWords.push({ apply_period: { [Op.like]: '%%' } })
           } else if ( i === '상시') {
-            applyWords.push({ apply_end : "2022-12-31" })
+            applyWords.push({ apply_period: { [Op.like]: '%%' } })
           } else if ( i === '선착순') {
             applyWords.push({ apply_period: { [Op.or] : [ { [Op.like]: '%소진%' }, { [Op.like]: '선착' } ]}})
           } else if ( i === '공모중') {
