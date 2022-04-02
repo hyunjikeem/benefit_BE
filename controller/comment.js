@@ -20,8 +20,19 @@ const makeComment = async (req, res) => {
             postId,
             content,
         });
+        
+        const commentId = await Comment.findOne({
+            attributes: ['CommentId'],
+            where: {
+                userId,
+                postId,
+                content,
+            }
+        })
+
         return res.status(201).send({
             ok: true,
+            commentId,
             message: '댓글이 작성되었습니다.',
         });
     } catch (err) {
