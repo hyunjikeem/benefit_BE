@@ -59,28 +59,50 @@ exports.searchResults = async (req, res) => {
 
       
       //지원기간 (apply_period)
-      const now= new Date();
-      const today = new Date(now.setDate(now.getDate() + 14))
+      const now = new Date();
+
+      const today = new Date(now.setDate(now.getDate()))
       const year = today.getFullYear();
       const month = ('0' + (today.getMonth() + 1)).slice(-2);
-      const day = ('0' + today.getDate()).slice(-2);
+      const date = ('0' + today.getDate()).slice(-2);
 
-      const todayString = year + '-' + month  + '-' + day;
+      const todayString = year + '-' + month  + '-' + date;
+
+      // 14일 후
+      const after14 = new Date(now.setDate(now.getDate() + 14))
+      const year14 = after14.getFullYear();
+      const month14 = ('0' + (after14.getMonth() + 1)).slice(-2);
+      const date14 = ('0' + after14.getDate()).slice(-2);
+
+      const string14 = year14 + '-' + month14  + '-' + date14;
+
+      // 14일 전
+      const before14 = new Date(now.setDate(now.getDate() - 14))
+      const Year14 = before14.getFullYear();
+      const Month14 = ('0' + (before14.getMonth() + 1)).slice(-2);
+      const Date14 = ('0' + before14.getDate()).slice(-2);
+
+      const String14 = Year14 + '-' +Month14  + '-' + Date14;
       
       
       let applyWords = [];
       for (let i of apply_period) {
           if ( i === 'all') {
-            applyWords.push({ apply_period: { [Op.like]: '%%' } })
+            applyWords.push({ apply_end : { [Op.like]: '%%' } })
           } else if ( i === '상시') {
-            applyWords.push({ apply_period: { [Op.like]: '%%' } })
+            applyWords.push({ apply_end : { [Op.like]: '%상시%' } })
+          } else if ( i === '수시') {
+            applyWords.push({ apply_end : { [Op.like]: '%수시%' } })
           } else if ( i === '선착순') {
-            applyWords.push({ apply_period: { [Op.or] : [ { [Op.like]: '%소진%' }, { [Op.like]: '선착' } ]}})
+            applyWords.push({ apply_end : { [Op.like]: '%선착%' } })
           } else if ( i === '공모중') {
-            applyWords.push({ [Op.and] :  [{ apply_start: { [Op.lte]: today } }, { apply_end: { [Op.gte]: today } }]} )
+            applyWords.push({ [Op.and] :  [{ apply_start: { [Op.gte]: todayString } }, { apply_end: { [Op.lte]: todayString } }]} )
           } else if ( i === '마감일 임박 (14일 미만)') {
-            // applyWords.push({ [Op.and] : [{ apply_start: { [Op.lte]: today } },{ apply_end: { [Op.lte]: fourteen } }]})
-
+            applyWords.push({ [Op.and] : [{ apply_start: { [Op.gte]: todayString } },{ apply_end: { [Op.lte]: after14 } }]})
+          } else if ( i === '신청 예정 (14일 미만)') {
+            applyWords.push({ [Op.and] : [{ apply_start: { [Op.gte]: todayString } },{ apply_end: { [Op.lte]: after14 } }]})
+          } else if ( i === '기타') {
+            applyWords.push({ apply_end : { [Op.like]: '%상세%' } })
           }
       }
 
