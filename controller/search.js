@@ -75,15 +75,7 @@ exports.searchResults = async (req, res) => {
       const date14 = ('0' + after14.getDate()).slice(-2);
 
       const string14 = year14 + '-' + month14  + '-' + date14;
-
-      // 14일 전
-      const before14 = new Date(now.setDate(now.getDate() - 14))
-      const Year14 = before14.getFullYear();
-      const Month14 = ('0' + (before14.getMonth() + 1)).slice(-2);
-      const Date14 = ('0' + before14.getDate()).slice(-2);
-
-      const String14 = Year14 + '-' +Month14  + '-' + Date14;
-      
+     
       
       let applyWords = [];
       for (let i of apply_period) {
@@ -96,11 +88,11 @@ exports.searchResults = async (req, res) => {
           } else if ( i === '선착순') {
             applyWords.push({ apply_end : { [Op.like]: '%선착%' } })
           } else if ( i === '공모중') {
-            applyWords.push({ [Op.and] :  [{ apply_start: { [Op.gte]: todayString } }, { apply_end: { [Op.lte]: todayString } }]} )
+            applyWords.push({ [Op.and] :  [{ apply_start: { [Op.lte]: todayString } }, { apply_end: { [Op.gte]: todayString } }]} )
           } else if ( i === '마감일 임박 (14일 미만)') {
-            applyWords.push({ [Op.and] : [{ apply_start: { [Op.gte]: todayString } },{ apply_end: { [Op.lte]: after14 } }]})
+            applyWords.push({ [Op.and] : [{ apply_start: { [Op.lte]: todayString } },{ apply_end: { [Op.lte]: string14 } }]})
           } else if ( i === '신청 예정 (14일 미만)') {
-            applyWords.push({ [Op.and] : [{ apply_start: { [Op.gte]: todayString } },{ apply_end: { [Op.lte]: after14 } }]})
+            applyWords.push({ [Op.and] : [{ apply_start: { [Op.gte]: todayString } },{ apply_start: { [Op.lte]: string14 } }]})
           } else if ( i === '기타') {
             applyWords.push({ apply_end : { [Op.like]: '%상세%' } })
           }
