@@ -124,7 +124,7 @@ exports.detailpage = async (req, res) => {
     FROM Comments as c INNER JOIN Users as u on u.userId = c.userId WHERE postId =${postId}`,{ type: QueryTypes.SELECT })
 
     const review = await Review.findAll({
-      attributes: ['reviewId','review_link',[sequelize.literal(`CASE WHEN userId = ${userId} THEN true ELSE false END`), 'review_status', 'userId']],
+      attributes: ['reviewId','review_link',[sequelize.literal(`CASE WHEN userId = ${userId} THEN true ELSE false END`), 'review_status']],
       where : { postId },
     })
 
