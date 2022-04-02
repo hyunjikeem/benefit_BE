@@ -43,7 +43,7 @@ const  googleCallback = (req, res, next) => {
     passport.authenticate('google', { failureRedirect: '/' }, (err, user, info) => {
         if (err) return next(err);
         const { userId, nickname } = user;
-        const token = jwt.sign({ userId: userId }, process.env.TOKENKEY);
+        const token = jwt.sign({ userId: userId }, process.env.TOKENKEY, { expiresIn: '6h'});
         result = {
             token: token,
             nickname: nickname,
