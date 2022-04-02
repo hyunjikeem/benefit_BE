@@ -120,7 +120,7 @@ exports.detailpage = async (req, res) => {
     });
     await Policy.update({ view : Policy.sequelize.literal('view + 1') }, { where: { postId : postId } });
     
-    const comment = await sequelize.query(`SELECT c.CommentId as commentId, c.createdAt as insert_time, c.content, replace( u.nickname, substr(u.nickname, 2), '****') as nickname 
+    const comment = await sequelize.query(`SELECT c.CommentId as commentId, c.createdAt as insert_time, c.content, replace( u.nickname, substr(u.nickname, 2), '****') as nickname, c.userId
     FROM Comments as c INNER JOIN Users as u on u.userId = c.userId WHERE postId =${postId}`,{ type: QueryTypes.SELECT })
 
     const review = await Review.findAll({

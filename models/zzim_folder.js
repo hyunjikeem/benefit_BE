@@ -20,16 +20,17 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-
             folder_name: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-
             folder_status: {
                 allowNull: false,
                 type:Sequelize.BOOLEAN,
-            }
+            },
+            folder_view: {
+                type: Sequelize.INTEGER(100), 
+            },
         },
         {
             sequelize,
