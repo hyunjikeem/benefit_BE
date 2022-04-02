@@ -66,10 +66,11 @@ exports.createFolder = async (req, res) => {
            userId,
            folder_name,
            folder_status : false,
-           nickname
+           nickname,
+           folder_view : 0
         })
 
-        const theFolder = await Zzim_folder.findOne({where : {userId, folder_name, folder_status : false}})
+        const theFolder = await Zzim_folder.findOne({where : {userId, folder_name, folder_status : false,}})
                 
         res.status(200).send({folderId : theFolder.folderId})
      
