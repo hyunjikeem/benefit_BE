@@ -10,6 +10,7 @@ exports.searchResults = async (req, res) => {
       
       const {location, benefit, education, job_status, txt, age, major, special_limit, apply_period, paging, category, order } = req.body;
 
+      console.log(category)
 
       // 더보기 (페이지네이션을 위한 초기작업)
       let c0_paging = 10
