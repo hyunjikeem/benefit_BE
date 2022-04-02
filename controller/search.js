@@ -80,7 +80,7 @@ exports.searchResults = async (req, res) => {
       let applyWords = [];
       for (let i of apply_period) {
           if ( i === 'all') {
-            applyWords.push({ apply_end : { [Op.like]: '%%' } })
+            applyWords.push({ [Op.or] : [{ apply_end : { [Op.like]: '%%' } }, { apply_end: { [Op.eq]: null } } ] })
           } else if ( i === '상시') {
             applyWords.push({ apply_end : { [Op.like]: '%상시%' } })
           } else if ( i === '수시') {
@@ -102,7 +102,7 @@ exports.searchResults = async (req, res) => {
         // 검색창 검색, 검색창 필터
       let txtWords = [];
       if (txt === 'all') {
-          txtWords.push({ title: { [Op.like]: '%%' } })
+          txtWords.push({ [Op.or] : [{ title : { [Op.like]: '%%' } }, { title : { [Op.eq]: null } } ] })
       } else {
           txtWords.push({ title: { [Op.like]: `%${txt}%` } })
           txtWords.push({ location: { [Op.like]: `%${txt}%` } })
@@ -114,7 +114,7 @@ exports.searchResults = async (req, res) => {
       let locationWords = [];
       for (let i of location) {
           if ( i === 'all') {
-            locationWords.push({ location: { [Op.like]: '%%' } })
+            locationWords.push({ [Op.or] : [{ location : { [Op.like]: '%%' } }, { location : { [Op.eq]: null } } ] })
           } else {
             locationWords.push({ location: { [Op.like]: `%${i}%` } })
           }
@@ -123,7 +123,7 @@ exports.searchResults = async (req, res) => {
       // 교육? 재학상태 필터 (education)
       let educationWords = [];
       if (education === 'all') {
-          educationWords.push({ education: { [Op.like]: '%%' } }) 
+          educationWords.push({ [Op.or] : [{ education : { [Op.like]: '%%' } }, { education : { [Op.eq]: null } } ] }) 
       } else if (education === '대학생 (재학,대학생)') {
           educationWords.push({ education: { [Op.like]: '%재학%' } })
           educationWords.push({ education: { [Op.like]: '%대학생%' } })
@@ -141,7 +141,7 @@ exports.searchResults = async (req, res) => {
       let benefitWords = [];
       for (let i of benefit) {
         if ( i === 'all') {
-            benefitWords.push({ benefit: { [Op.like]: '%%' } })
+            benefitWords.push({ [Op.or] : [{ benefit : { [Op.like]: '%%' } }, { benefit : { [Op.eq]: null } } ] })
         } else {
             benefitWords.push({ benefit: { [Op.like]: `%${i}%` } })
         }
@@ -150,7 +150,7 @@ exports.searchResults = async (req, res) => {
      // 취업 상태 필터 (job_status)
      let jobWords = [];
      if (job_status === 'all') {
-          jobWords.push({ job_status: { [Op.like]: '%%' } }) 
+          jobWords.push({ [Op.or] : [{ job_status : { [Op.like]: '%%' } }, { job_status : { [Op.eq]: null } } ] }) 
      } else if (job_status === '미취업') {
           jobWords.push({ job_status: { [Op.like]: '%미취업%' } })
      } else if (job_status === "자영업") {
@@ -173,7 +173,7 @@ exports.searchResults = async (req, res) => {
      // 나이 제한
      let ageWords = [];
      if (age === 'all') {
-        ageWords.push({ age: { [Op.like]: '%%' } })
+        ageWords.push({ [Op.or] : [{ age : { [Op.like]: '%%' } }, { age: { [Op.eq]: null } } ] })
      } else if (age === 'true') {
         ageWords.push({ age: { [Op.and] : [ { [Op.notLike] : '%제한%없음%' }, { [Op.notLike] : '-' },]}})
      } else  {
@@ -183,18 +183,18 @@ exports.searchResults = async (req, res) => {
      // 전공 제한
      let majorWords = [];
      if (major === 'all') {
-        majorWords.push({ major: { [Op.like]: '%%' } })
+        majorWords.push({ [Op.or] : [{ major : { [Op.like]: '%%' } }, { major: { [Op.eq]: null } } ] })
      } else if (major === 'true') {
         majorWords.push({ major: { [Op.and] : [ { [Op.notLike] : '%제한%없음%' }, { [Op.notLike] : '-' },]}})
      } else  {
-        majorWords.push({ age: { [Op.or] : [ { [Op.like]: '%제한%없음%' }, { [Op.like]: '-' } ]}})
+        majorWords.push({ major: { [Op.or] : [ { [Op.like]: '%제한%없음%' }, { [Op.like]: '-' } ]}})
      }
 
 
      // 기타 제한 사항 
      let specialWords = [];
      if (special_limit === 'all') {
-        specialWords.push({ without: { [Op.like]: '%%' } })
+        specialWords.push({ [Op.or] : [{ without : { [Op.like]: '%%' } }, { without: { [Op.eq]: null } } ] })
      } else if (special_limit === 'true') {
         specialWords.push({ without: { [Op.and] : [ { [Op.notLike] : '%제한%없음%' }, { [Op.notLike] : '-' },]}})
      } else  {
@@ -406,8 +406,129 @@ const c6 = await Policy.findAll({
   limit : c6_paging,
   order: [ [ orderCol, orderHow ] ]
 });
+
+const c0_count = await Policy.count({
+  where: {
+      [Op.and] : [
+          {state : "게제중"},
+          { [Op.or]: txtWords },
+          { [Op.or]: locationWords },
+          { [Op.or]: benefitWords },
+          { [Op.or]: educationWords },
+          { [Op.or]: jobWords },
+          { [Op.or]: ageWords },
+          { [Op.or]: majorWords },
+          { [Op.or]: specialWords},
+          { [Op.or]: applyWords },
+    ]
+  },
+});
+const c1_count = await Policy.count({
+  where: {
+      [Op.and] : [
+          {category : "주거·금융"},
+          {state : "게제중"},
+          { [Op.or]: txtWords },
+          { [Op.or]: locationWords },
+          { [Op.or]: benefitWords },
+          { [Op.or]: educationWords },
+          { [Op.or]: jobWords },
+          { [Op.or]: ageWords },
+          { [Op.or]: majorWords },
+          { [Op.or]: specialWords},
+          { [Op.or]: applyWords },
+    ]
+  },
+});
+const c2_count = await Policy.count({
+  where: {
+      [Op.and] : [
+          {state : "게제중"},
+          {category : "코로나19"},
+          { [Op.or]: txtWords },
+          { [Op.or]: locationWords },
+          { [Op.or]: benefitWords },
+          { [Op.or]: educationWords },
+          { [Op.or]: jobWords },
+          { [Op.or]: ageWords },
+          { [Op.or]: majorWords },
+          { [Op.or]: specialWords},
+          { [Op.or]: applyWords },
+    ]
+  },
+});
+const c3_count = await Policy.count({
+  where: {
+      [Op.and] : [
+          {state : "게제중"},
+          {category : "창업지원"},
+          { [Op.or]: txtWords },
+          { [Op.or]: locationWords },
+          { [Op.or]: benefitWords },
+          { [Op.or]: educationWords },
+          { [Op.or]: jobWords },
+          { [Op.or]: ageWords },
+          { [Op.or]: majorWords },
+          { [Op.or]: specialWords},
+          { [Op.or]: applyWords },
+    ]
+  },
+});
+const c4_count = await Policy.count({
+  where: {
+      [Op.and] : [
+          {state : "게제중"},
+          {category : "생활·복지"},
+          { [Op.or]: txtWords },
+          { [Op.or]: locationWords },
+          { [Op.or]: benefitWords },
+          { [Op.or]: educationWords },
+          { [Op.or]: jobWords },
+          { [Op.or]: ageWords },
+          { [Op.or]: majorWords },
+          { [Op.or]: specialWords},
+          { [Op.or]: applyWords },
+    ]
+  },
+});
+const c5_count = await Policy.count({
+  where: {
+      [Op.and] : [
+          {state : "게제중"},
+          {category : "정책참여"},
+          { [Op.or]: txtWords },
+          { [Op.or]: locationWords },
+          { [Op.or]: benefitWords },
+          { [Op.or]: educationWords },
+          { [Op.or]: jobWords },
+          { [Op.or]: ageWords },
+          { [Op.or]: majorWords },
+          { [Op.or]: specialWords},
+          { [Op.or]: applyWords },
+    ]
+  },
+});
+const c6_count = await Policy.count({
+  where: {
+      [Op.and] : [
+          {state : "게제중"},
+          {category : "취업지원"},
+          { [Op.or]: txtWords },
+          { [Op.or]: locationWords },
+          { [Op.or]: benefitWords },
+          { [Op.or]: educationWords },
+          { [Op.or]: jobWords },
+          { [Op.or]: ageWords },
+          { [Op.or]: majorWords },
+          { [Op.or]: specialWords},
+          { [Op.or]: applyWords },
+    ]
+  },
+});
+
+const count = { c0 : c0_count, c1 : c1_count,  c2 : c2_count, c3 : c3_count, c4 :c4_count, c5 : c5_count, c6 :c6_count }
       
-      res.json({ c0,c1,c2,c3,c4,c5,c6 });
+      res.json({ c0,c1,c2,c3,c4,c5,c6, count });
     } catch (error) {
       console.log(error)
       res.status(400).json({ result : 'false'})
