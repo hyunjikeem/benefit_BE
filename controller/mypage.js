@@ -49,17 +49,19 @@ const getCommentList = async (req, res) => {
             });
         } 
 
-        let comments = await Policy.findAll({
-            attributes: ['postId', 'title', 'benefit'],
-            include: [
-                {
-                    model: Comment,
-                    attributes: ['commentId', 'content', 'createdAt'],
-                    where: { userId }
-                }
-            ],
-            raw: true,
-        });
+        // let comments = await Policy.findAll({
+        //     attributes: ['postId', 'title', 'benefit'],
+        //     include: [
+        //         {
+        //             model: Comment,
+        //             attributes: ['commentId', 'content', 'createdAt'],
+        //             where: { userId }
+        //         }
+        //     ],
+        //     raw: true,
+        // });
+
+        const comments = await sequelize.query(`SELECT p.postId, p.title, p.benefit, c.CommentId as commentId, c.content as content, c.createdAt as createdAt FROM policies as p INNER JOIN Comments as c on p.postId = c.postId where userId = ${userId}`, { type: QueryTypes.SELECT })
 
         res.status(200).send({
             comments,
