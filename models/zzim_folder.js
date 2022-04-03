@@ -31,6 +31,9 @@ module.exports = (sequelize, DataTypes) => {
             folder_view: {
                 type: Sequelize.INTEGER(100), 
             },
+            folder_content: {
+                type: Sequelize.STRING,
+            }
         },
         {
             sequelize,
