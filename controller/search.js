@@ -1,8 +1,11 @@
-const { Policy } = require('../models');
+const { sequelize } = require('../models');
 const { Op } = require('sequelize');
-const { Zzim } = require('../models');
 const { type } = require('express/lib/response');
-const { fn, col } = Policy.sequelize;
+const db = require('../models');
+const Policy = db.Policy
+const Zzim = db.Zzim
+const { fn, col } = db.sequelize;
+
 
 
 exports.searchResults = async (req, res) => {
@@ -204,8 +207,10 @@ exports.searchResults = async (req, res) => {
       
 
      //전체 뿌리기
-      const c0 = await Policy.findAll({
-          attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
+      const c00 = await Policy.findAll({
+          
+          attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 
+          'view', 'operation','location','job_status','education','apply_start','apply_end'],
           where: {
               [Op.and] : [
                   {state : "게제중"},
@@ -226,14 +231,16 @@ exports.searchResults = async (req, res) => {
             attributes: [
               [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
             ],
-            where : { userId },
+            where : { userId }
           }], 
           raw : true,
-          limit : c0_paging,
-          order: [ [ orderCol, orderHow ] ]
+          group : 'postId',
+          order: [ [ orderCol, orderHow ] ],
       });
 
-    const c1 = await Policy.findAll({
+      const c0 = c00.slice(0, c0_paging)
+
+  const c11 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
       where: {
           [Op.and] : [
@@ -256,13 +263,16 @@ exports.searchResults = async (req, res) => {
         attributes: [
           [Zzim.sequelize.literal('CASE WHEN zzim_status = 1 THEN "true" ELSE "false" END'),'zzim_status' ]
         ],
-        where : { userId}
+        where : { userId }
       }],
       raw : true,
-      limit : c1_paging,
-      order: [ [ orderCol, orderHow ] ]
+      group : 'postId',
+      order: [ [ orderCol, orderHow ] ],
   });
-  const c2 = await Policy.findAll({
+
+const c1 = c11.slice(0, c1_paging)
+
+const c22 = await Policy.findAll({
     attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
     where: {
         [Op.and] : [
@@ -288,10 +298,12 @@ exports.searchResults = async (req, res) => {
       where : { userId : userId},
     }],
     raw : true,
-    limit : c2_paging,
+    group : 'postId',
     order: [ [ orderCol, orderHow ] ]
 });
-    const c3 = await Policy.findAll({
+const c2 = c22.slice(0, c2_paging)
+
+const c33 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
       where: {
           [Op.and] : [
@@ -317,10 +329,12 @@ exports.searchResults = async (req, res) => {
         where : { userId },
       }],
       raw : true,
-      limit : c3_paging,
+      group : 'postId',
       order: [ [ orderCol, orderHow ] ]
 });
-    const c4 = await Policy.findAll({
+const c3 = c33.slice(0, c3_paging)
+    
+const c44 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
       where: {
           [Op.and] : [
@@ -346,10 +360,12 @@ exports.searchResults = async (req, res) => {
         where : { userId },
       }],
       raw : true,
-      limit : c4_paging,
+      group : 'postId',
       order: [ [ orderCol, orderHow ] ]
 });
-    const c5 = await Policy.findAll({
+const c4 = c44.slice(0, c4_paging)
+
+    const c55 = await Policy.findAll({
       attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
       where: {
           [Op.and] : [
@@ -375,10 +391,12 @@ exports.searchResults = async (req, res) => {
         where : { userId},
       }],
       raw : true,
-      limit : c5_paging,
+      group : 'postId',
       order: [ [ orderCol, orderHow ] ]
 });
-const c6 = await Policy.findAll({
+const c5 = c55.slice(0, c5_paging)
+
+const c66 = await Policy.findAll({
   attributes:['postId', 'category', 'benefit', 'title', [fn('concat', col('apply_start'), ' ~ ', col('apply_end')), "apply_period"], 'view', 'operation','location','job_status','education','apply_start','apply_end'],
   where: {
       [Op.and] : [
@@ -404,9 +422,12 @@ const c6 = await Policy.findAll({
     where : { userId},
   }],
   raw : true,
-  limit : c6_paging,
+  group : 'postId',
   order: [ [ orderCol, orderHow ] ]
 });
+const c6 = c66.slice(0, c6_paging)
+
+
 
 const c0_count = await Policy.count({
   where: {
