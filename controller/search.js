@@ -26,17 +26,17 @@ exports.searchResults = async (req, res) => {
 
       
       for (let i of category) {
-        if (i === "주거·금융") {
+        if (i === "c1") {
           c1_paging = Math.ceil((c1_paging * paging) / category.length)
-        } else if (i ===  "코로나19") {
+        } else if (i ===  "c2") {
           c2_paging = Math.ceil((c2_paging * paging) / category.length)
-        } else if (i ===  "창업지원") {
+        } else if (i ===  "c3") {
           c3_paging = Math.ceil((c3_paging * paging) / category.length)
-        } else if (i ===  "생활·복지") {
+        } else if (i ===  "c4") {
           c4_paging = Math.ceil((c4_paging * paging) / category.length)
-        } else if (i ===  "정책참여") {
+        } else if (i ===  "c5") {
           c5_paging = Math.ceil((c5_paging * paging) / category.length)
-        } else if (i ===  "취업지원") {
+        } else if (i ===  "c6") {
           c6_paging = Math.ceil((c6_paging * paging) / category.length)
         } else if (i ===  "all") {
           c0_paging = Math.ceil((c0_paging * paging) / category.length)

@@ -28,7 +28,8 @@ const kakaoCallback = (req, res, next) => {
                 userId,
                 folder_name: '기본 폴더',
                 folder_status : false,
-                nickname
+                nickname,
+                folder_view : 0
              })
         }
 
