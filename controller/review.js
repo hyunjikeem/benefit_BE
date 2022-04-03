@@ -67,7 +67,8 @@ exports.createFolder = async (req, res) => {
            folder_name,
            folder_status : false,
            nickname,
-           folder_view : 0
+           folder_view : 0,
+           folder_content : ""
         })
 
         const theFolder = await Zzim_folder.findOne({where : {userId, folder_name, folder_status : false,}})
