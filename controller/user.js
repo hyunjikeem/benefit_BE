@@ -41,37 +41,8 @@ const kakaoCallback = (req, res, next) => {
     })(req, res, next);
 };
 
-const  googleCallback = (req, res, next) => {
-    passport.authenticate('google', { failureRedirect: '/' }, (err, user, info) => {
-        if (err) return next(err);
-        const { userId, nickname } = user;
-        const token = jwt.sign({ userId: userId }, process.env.TOKENKEY, { expiresIn: '6h'});
-        result = {
-            token: token,
-            nickname: nickname,
-            userId,
-        };
-        res.send({ user: result });
-    })(req, res, next);
-};
-
-const naverCallback = (req, res, next) => {
-    passport.authenticate('naver', { failureRedirect: '/' }, (err, user, info) => {
-        if (err) return next(err);
-        const { userId, nickname } = user;
-        const token = jwt.sign({ userId: userId }, process.env.TOKENKEY);
-        result = {
-            token: token,
-            nickname: nickname,
-            userId,
-        };
-    })(req, res, next);
-};
-
 
 module.exports = {
     kakaoCallback,
-    googleCallback,
-    naverCallback,
 };
 
