@@ -6,12 +6,9 @@ const app = express();
 const passportConfig = require('./passport');
 const port = 3000;
 const cors = require('cors');
-const corsOption = {
-    origin: ['https://d198iyuru9f9ja.cloudfront.net/', `http://localhost:${port}`]
-};
 // const router = require('./routes/auth');
 
-app.use(cors(corsOption));
+app.use(cors());
 passportConfig(app);
 
 app.use(express.json());
