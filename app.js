@@ -6,12 +6,9 @@ const app = express();
 const passportConfig = require('./passport');
 const port = 3000;
 const cors = require('cors');
-const corsOption = {
-    origin: ['https://y-benefit.com', `http://localhost:${port}`,]
-};
 // const router = require('./routes/auth');
 
-app.use(cors(corsOption));
+app.use(cors());
 passportConfig(app);
 
 app.use(express.json());
