@@ -7,7 +7,7 @@ const passportConfig = require('./passport');
 const port = 3000;
 const cors = require('cors');
 const corsOption = {
-    origin: ['https://y-benefit.com', `http://localhost:${port}`]
+    origin: ['https://d198iyuru9f9ja.cloudfront.net/', `http://localhost:${port}`]
 };
 // const router = require('./routes/auth');
 
