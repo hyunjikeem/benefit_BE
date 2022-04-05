@@ -14,7 +14,7 @@ const curationpage = async (req, res) => {
         
         let sortMethod = "folder_view"; 
 
-        if (sort === "detail") {
+        if (sort === "period") {
             sortMethod = "folderId"
         }
         
