@@ -9,7 +9,7 @@ const { QueryTypes } = require('sequelize');
 const curationpage = async (req, res) => {
     try{
         
-        const sort = req.params;
+        const {sort } = req.params;
         let sortMethod = folder_view; 
 
         if (sort === "detail") {
