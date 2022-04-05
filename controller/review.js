@@ -71,7 +71,7 @@ exports.createFolder = async (req, res) => {
            folder_content : ""
         })
 
-        const theFolder = await Zzim_folder.findOne({where : {userId, folder_name, folder_status : false,}})
+        const theFolder = await Zzim_folder.findOne({where : {userId, folder_name, folder_status : false}})
                 
         res.status(200).send({folderId : theFolder.folderId})
      
@@ -87,10 +87,10 @@ exports.createFolder = async (req, res) => {
 exports.updateFolder = async (req, res) => {
     try {
 
-    const { folderId, folder_name, folder_status } = req.body;
+    const { folderId, folder_name, folder_status, folder_content } = req.body;
     const { userId } = res.locals.user;
     
-    await Zzim_folder.update({ folder_name, folder_status }, { where: { folderId, userId } });    
+    await Zzim_folder.update({ folder_name, folder_status, folder_content }, { where: { folderId, userId } });    
     res.status(201).send({ ok: true });
 
     } catch (error) {
@@ -106,16 +106,26 @@ exports.deleteFolder = async (req, res) => {
     try {
     const { folderId }  = req.body;
     const { userId } = res.locals.user;
+
+    const existfolder = await Zzim_folder.findAll({ where : { userId } })
     
-    await Zzim_folder.destroy({where: { folderId , userId} })
+    if (existfolder.length === 1 ) {
+        res.status(201).send({ ok: false });
+
+    } else {
+        
+        await Zzim_folder.destroy({where: { folderId , userId} })
+        res.status(201).send({ ok: true });
+
+    }
     
-    res.status(201).send({ ok: true });
+    
 
     } catch (error) {
 
         console.log(error)
         res.status(400).send({
-            ok: false
+            ok: "error"
         })
     }
 
