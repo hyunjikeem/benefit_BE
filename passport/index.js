@@ -16,9 +16,6 @@ module.exports = (app) => {
         // accessToken, refreshToken : 로그인 성공 후 카카오가 보내준 토큰
         // profile: 카카오가 보내준 유저 정보. profile의 정보를 바탕으로 회원가입
         async (accessToken, refreshToken, profile, done) => {
-            console.log(accessToken);
-            console.log(refreshToken);
-            console.log('kakao profile', profile);
             try {
                 const exUser = await User.findOne({
                     // 카카오 플랫폼에서 로그인 했고 & snsId필드에 카카오 아이디가 일치할경우
@@ -44,75 +41,6 @@ module.exports = (app) => {
         },
         ),
     );
-    passport.use(
-        new NaverStrategy(
-            {
-                clientID: process.env.NAVER_ID,
-                clientSecret: process.env.NAVER_SECRET,
-                callbackURL: process.env.NAVER_URL
-            },
-            async (accessToken, refreshToken, profile, done) => {
-                console.log('nvaer profile : ', profile);
-                try {
-                    const exUser = await User.findOne({
-                        // 네이버 플랫폼에서 로그인 했고 & snsId 필드에 네이버 아이디가 일치할경우
-                        where: { snsId: profile.id, providerType: 'naver' },
-                    });
-                    // 이미 가입된 네이버 프로필이면 성공
-                    if (exUser) {
-                        done(null, exUser);
-                    } else {
-                        // 가입되지 않는 유저면 회원가입 시키고 로그인을 시킨다
-                        const newUser = await User.create({
-                            email: profile.email,
-                            nickname: profile.name,
-                            snsId: profile.id,
-                            providerType: 'naver',
-                        });
-                        done(null, newUser);
-                    }
-                } catch (error) {
-                    console.error(error);
-                    done(error);
-                }
-            },
-        ),
-    );
-    passport.use(
-        new GoogleStrategy(
-            {
-                clientID: process.env.GOOGLE_ID,
-                clientSecret: process.env.GOOGLE_SECRET,
-                callbackURL: process.env.GOOGLE_URL,
-            },
-            async (accessToken, refreshToken, profile, done) => {
-                console.log('accessToken:', accessToken);
-                console.log('google profile : ', profile);
-                try {
-                    const exUser = await User.findOne({
-                        // 구글 플랫폼에서 로그인 했고 & snsId필드에 구글 아이디가 일치할경우
-                        where : { snsId: profile.id, providerType: 'google' },
-                    });
-                    // 이미 가입된 구글 프로필이면 성공
-                    if (exUser) {
-                        done(null, exUser); // 로그인 인증 완료
-                    } else {
-                        // 가입되지 않는 유저면 회원가입 시키고 로그인을 시킨다
-                        const newUser = await User.create({
-                            // email: profile?.email[0].value,
-                            nickname: profile.displayName,
-                            snsId: profile.id,
-                            providerType: 'google',
-                        });
-                        done(null, newUser); // 회원가입하고 로그인 인증 완료
-                    }
-                } catch (error) {
-                    console.error(error);
-                    done(error);
-                }
-            },
-        ),
-    )
     passport.serializeUser((user,done)=>{ 
         done(null,user);
     });
