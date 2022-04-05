@@ -11,6 +11,7 @@ const kakaoCallback = (req, res, next) => {
         if (err) return next(err);
         const { userId, nickname } = user;
         const token = jwt.sign({ userId: userId }, process.env.TOKENKEY);
+        // console.log(token);
         result = {
             token: token,
             nickname: nickname,
@@ -34,6 +35,8 @@ const kakaoCallback = (req, res, next) => {
         }
 
         const result2 = await sequelize.query(`SELECT f.folder_name, f.folderId, f.folder_status, group_concat(z.postId) as postId_list FROM Zzim_folders as f LEFT JOIN Zzims as z on z.folderId = f.folderId where f.userId = ${userId} group by f.folderId;`, { type: QueryTypes.SELECT });
+        // console.log(result);
+        // console.log(result2);
         res.send({ user: result, result2 });
     })(req, res, next);
 };
