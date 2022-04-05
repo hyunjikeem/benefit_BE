@@ -17,6 +17,8 @@ const curationpage = async (req, res) => {
         if (sort === "detail") {
             sortMethod = "folderId"
         }
+        
+        console.log(sortMethod)
 
         const curationlist = await sequelize.query(`SELECT folder_name, folderId, userId, replace(nickname, substr(nickname, 2), "****") as nickname, folder_view, folder_content, folder_status, (select benefit from Zzims as z INNER JOIN policies as p on z.postId = p.postId and f.folderId = z.folderId limit 1) as benefit, (select p.category from Zzims as z  INNER JOIN policies as p on z.postId = p.postId and f.folderId = z.folderId limit 1 offset 0 ) as c1, (select p.category from Zzims as z INNER JOIN policies as p on z.postId = p.postId and f.folderId = z.folderId limit 1 offset 1) as c2, (select p.category from Zzims as z INNER JOIN policies as p on z.postId = p.postId and f.folderId = z.folderId limit 1 offset 2) as c3, (select p.category from Zzims as z INNER JOIN policies as p on z.postId = p.postId and f.folderId = z.folderId limit 1 offset 3) as c4 from Zzim_folders as f  where f.folder_status = 1 order by ${sortMethod} DESC`, { type: QueryTypes.SELECT })
         
