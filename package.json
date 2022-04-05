@@ -22,7 +22,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "artillery"
   },
   "repository": {
     "type": "git",
@@ -35,5 +36,8 @@
     "url": "https://github.com/hyunjikeem/benefit_BE/issues"
   },
   "homepage": "https://github.com/hyunjikeem/benefit_BE#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "artillery": "^2.0.0-14"
+  }
 }
