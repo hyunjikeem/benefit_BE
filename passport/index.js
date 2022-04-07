@@ -1,7 +1,5 @@
 const passport = require('passport');
 const KakaoStrategy = require('passport-kakao').Strategy;
-const NaverStrategy = require('passport-naver-v2').Strategy;
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const { User } = require('../models');
 
 module.exports = (app) => {
