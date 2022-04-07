@@ -1,12 +1,41 @@
 require('dotenv').config(); // 환경변수
 const express = require('express');
+const AdminJS = require('adminjs');
+const AdminJSExpress = require('@adminjs/express');
+const AdminJSSequelize = require('@adminjs/sequelize');
 const { sequelize } = require('./models');
 const app = express();
-// const passport = require('passport');
 const passportConfig = require('./passport');
 const port = 3000;
 const cors = require('cors');
-// const router = require('./routes/auth');
+
+const ADMIN = {
+    email: process.env.ADMIN_EMAIL,
+    password: process.env.ADMIN_PW,
+};
+
+AdminJS.registerAdapter(AdminJSSequelize);
+
+const db = require('./models');
+const adminJS = new AdminJS({
+    databases: [db],
+    rootPath: '/admin',
+})
+
+const router = AdminJSExpress.buildAuthenticatedRouter(adminJS, {
+    authenticate: async (email, password) => {
+      if (ADMIN.password === password && ADMIN.email === email) {
+        return ADMIN
+      }
+        return null
+      },
+    cookieName: 'adminJS',
+    cookiePassword: 'testtest'
+  });
+  
+
+app.use(adminJS.options.rootPath, router);
+
 
 app.use(cors());
 passportConfig(app);
@@ -30,6 +59,7 @@ const searchRouter = require('./routes/search');
 const mypageRouter = require('./routes/mypage');
 const curationRouter = require('./routes/curation');
 const reviewRouter = require('./routes/review');
+
 
 
 app.use('/auth', [userRouter]);
